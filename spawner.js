@@ -7,10 +7,10 @@ const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 1;
 const INTIAL_BUILDERS = 0;
 
-const HARVESTERS_MAX = 6;
-const UPGRADERS_MAX = 6;
+const HARVESTERS_MAX = 8;
+const UPGRADERS_MAX = 8;
 const BUILDERS_MAX = 4;
-const REPAIRERS_MAX = 1;
+const REPAIRERS_MAX = 2;
 
 const BASE_CREEP_PRICE = 200;
 
@@ -36,7 +36,7 @@ var Spawner = {
         console.log("price is currently: ", price);
 
         // first creep to spawn
-        if(harvesters.length <= INITIAL_HARVESTERS){
+        if(harvesters.length < INITIAL_HARVESTERS){
             price = BASE_CREEP_PRICE + harvesters.length*25;
             // ensure we don't go overboard here
             if(price > maxEnergy)
@@ -54,7 +54,7 @@ var Spawner = {
             if(ret == 0)
                 console.log('Spawning new repairer: ' + newName);
         }
-        else if(upgraders.length < INTIAL_UPGRADERS) {
+        else if(upgraders.length <= INTIAL_UPGRADERS) {
             
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'upgrader');
             if(ret == 0)
@@ -68,7 +68,7 @@ var Spawner = {
                 console.log('Spawning new builder: ' + newName);
         }
 
-        else if(harvesters.length <= HARVESTERS_MAX){
+        else if(harvesters.length < HARVESTERS_MAX){
 
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
             if(ret == 0)
@@ -88,7 +88,6 @@ var Spawner = {
         }
         else if(repairers.length < REPAIRERS_MAX) {
             
-
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'repairer');
             if(ret == 0)
                 console.log('Spawning new repairer: ' + newName);

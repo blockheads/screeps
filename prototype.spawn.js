@@ -21,19 +21,19 @@ module.exports = function() {
             }
             
             // remaining energy
-            var remainingEnergy = energy - Math.floor(energy / 200);
+            var remainingEnergy = energy - Math.floor(energy / 200)*200;
             var name = "A Mistake";
 
             if(roleName == 'builder'){
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(CARRY);
                     remainingEnergy -= 50;
                 }
-                if(remainingEnergy > 100){
+                if(remainingEnergy >= 100){
                     body.push(WORK);
                     remainingEnergy -= 100;
                 }
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(MOVE);
                     remainingEnergy -= 50;
                 }
@@ -41,15 +41,15 @@ module.exports = function() {
                 name = roleBuilder.gen();
             }
             else if(roleName == 'harvester'){
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(MOVE);
                     remainingEnergy -= 50;
                 }
-                if(remainingEnergy > 100){
+                if(remainingEnergy >= 100){
                     body.push(WORK);
                     remainingEnergy -= 100;
                 }
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(CARRY);
                     remainingEnergy -= 50;
                 }
@@ -57,15 +57,15 @@ module.exports = function() {
                 name = roleHarvester.gen();
             }
             else if(roleName == 'upgrader'){
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(MOVE);
                     remainingEnergy -= 50;
                 }
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(CARRY);
                     remainingEnergy -= 50;
                 }
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(MOVE);
                     remainingEnergy -= 50;
                 }
@@ -73,21 +73,22 @@ module.exports = function() {
                 name = roleUpgrader.gen();
             }
             else if(roleName == 'repairer'){
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(MOVE);
                     remainingEnergy -= 50;
                 }
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(CARRY);
                     remainingEnergy -= 50;
                 }
-                if(remainingEnergy > 50){
+                if(remainingEnergy >= 50){
                     body.push(MOVE);
                     remainingEnergy -= 50;
                 }
 
                 name = roleRepairer.gen();
             }
+            console.log("body ", body, " name ", name, " role ", roleName);
 
             // create creep with the created body and the given role
             return this.createCreep(body, name, { role: roleName});
