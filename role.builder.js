@@ -11,10 +11,7 @@ var roleBuilder = {
             
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER ||
-                        structure.structureType == STRUCTURE_CONTAINER) &&
+                    return (structure.structureType == STRUCTURE_CONTAINER) &&
                         structure.store.getCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
@@ -52,8 +49,14 @@ var roleBuilder = {
         else {
             // withdrawing
             if(creep.memory.withdraw){
-                if(creep.withdraw(Game.getObjectById(creep.memory.withdraw), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(Game.getObjectById(creep.memory.withdraw), {visualizePathStyle: {stroke: '#ffffff'}});
+                // check that the store we are withdrawing from isn't 0 now
+                if(Game.getObjectById(creep.memory.withdraw).store[RESOURCE_ENERGY] == 0){
+                    creep.memory.withdraw = null;
+                }
+                else {
+                    if(creep.withdraw(Game.getObjectById(creep.memory.withdraw), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                        creep.moveTo(Game.getObjectById(creep.memory.withdraw), {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
                 }
             }
             // harvesting

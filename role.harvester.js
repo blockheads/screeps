@@ -33,27 +33,36 @@ var roleHarvester = {
             // if we don't have any storage selected
             if(!creep.memory.storage){
                 creep.memory.storage = resource.findOptimalStorage(creep).id;
-                
+                console.log("found optimal storage: ", creep.memory.storage);
                 // no avaible storage to be found, just excute roleUpgrader code.
                 // might want to add a delay so this doesn't use all of our cpu
-                if(!creep.memory.storage){
-                    roleUpgrader.run(creep);
-                }
+                
             }
-            else{
+
+            var storage = Game.getObjectById(creep.memory.storage);
+            if(storage){
+                console.log("obj: ",storage.store[RESOURCE_ENERGY], " == ", storage.store.getCapacity(RESOURCE_ENERGY));
                 // ensure that our selected storage isn't full
-                if(Game.getObjectById(creep.memory.storage).getFreeCapacity == 0 ){
+                if(storage.store[RESOURCE_ENERGY] == storage.store.getCapacity(RESOURCE_ENERGY)){
                     // just search for a new storage
                     creep.memory.storage = null;
+                    console.log("Free cap was 0!");
                 }
 
                 else {
-                    if(creep.transfer(Game.getObjectById(creep.memory.storage), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                        creep.moveTo(Game.getObjectById(creep.memory.storage), {visualizePathStyle: {stroke: '#ffffff'}});
+                    
+                    if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                        creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
+                        
                 }
             }
-            
+            else{
+                roleUpgrader.run(creep);
+            }
+                
         }
+        
     },
     /**
      * generates a harvester name
