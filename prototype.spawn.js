@@ -1,6 +1,7 @@
 const roleBuilder = require("./role.builder");
 const roleUpgrader = require("./role.upgrader");
 const roleRepairer = require("./role.repairer");
+const roleHarvester = require("./role.harvester");
 
 module.exports = function() {
     // create a new function for StructureSpawn
@@ -19,18 +20,72 @@ module.exports = function() {
                 body.push(MOVE);
             }
             
+            // remaining energy
+            var remainingEnergy = energy - Math.floor(energy / 200);
             var name = "A Mistake";
 
             if(roleName == 'builder'){
+                if(remainingEnergy > 50){
+                    body.push(CARRY);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy > 100){
+                    body.push(WORK);
+                    remainingEnergy -= 100;
+                }
+                if(remainingEnergy > 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+
                 name = roleBuilder.gen();
             }
             else if(roleName == 'harvester'){
-                name = roleBuilder.gen();
+                if(remainingEnergy > 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy > 100){
+                    body.push(WORK);
+                    remainingEnergy -= 100;
+                }
+                if(remainingEnergy > 50){
+                    body.push(CARRY);
+                    remainingEnergy -= 50;
+                }
+
+                name = roleHarvester.gen();
             }
             else if(roleName == 'upgrader'){
+                if(remainingEnergy > 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy > 50){
+                    body.push(CARRY);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy > 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+                
                 name = roleUpgrader.gen();
             }
             else if(roleName == 'repairer'){
+                if(remainingEnergy > 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy > 50){
+                    body.push(CARRY);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy > 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+
                 name = roleRepairer.gen();
             }
 
