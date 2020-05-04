@@ -14,38 +14,6 @@ for (var source in Memory.ResourceMap) {
     
 }
 
-/*
-room = Game.rooms['W47S15'];
-// our current room for debug W47S15
-var sources = room.find(FIND_SOURCES);
-
-for(var i in sources){
-    x = sources[i].pos.x;
-    y = sources[i].pos.y;
-    var ret = room.lookAtArea(y-1,x-1,y+1,x+1);
-    //console.log("ret:", y-1 , x-1 , y+1,x+1 );
-
-    var wallTotal = 0;
-    for(var i=y-1; i <= y+1; i++){
-        for(var j=x-1; j <= x+1; j++){
-            
-            //console.log("current tile: (", j, ',', i, ") ");
-            // a tile can have multiple objects on it
-            for(var k in ret[i][j]){
-                //console.log("current type: ", ret[i][j][k]["type"]);
-                if(ret[i][j][k]["type"] == LOOK_TERRAIN){
-                    // then we check if it is a wall
-                    if(ret[i][j][k][LOOK_TERRAIN] == 'wall'){
-                        wallTotal++;
-                    }
-                }
-            }
-            
-        }
-    }
-    console.log("Wall total: ", wallTotal);
-}
-*/
 
 var Resource = {
 
@@ -92,30 +60,62 @@ var Resource = {
     findOptimalSource: function(creep){
         
         // look at all of our current Active Sources
-        var sources = creep.room.find(FIND_SOURCES);
+        var sources = creep.room.find(FIND_SOURCES_ACTIVE);
         
         // check if this source has been initialized in our resource map
-        for(var i in sources){
+        for(var z in sources){
             
-            if(!Memory.ResourceMap[sources[i].id]){
-                Memory.ResourceMap[sources[i].id] = [];
+            var wallTotal = 0;
+            if(!Memory.ResourceMap[sources[z].id]){
+                
+                x = sources[z].pos.x;
+                y = sources[z].pos.y;
+                // get this lad's walltotal
+                var ret = creep.room.lookAtArea(y-1,x-1,y+1,x+1);
+                //console.log("ret:", y-1 , x-1 , y+1,x+1 );
+
+                
+                for(var i=y-1; i <= y+1; i++){
+                    for(var j=x-1; j <= x+1; j++){
+                        
+                        //console.log("current tile: (", j, ',', i, ") ");
+                        // a tile can have multiple objects on it
+                        for(var k in ret[i][j]){
+                            //console.log("current type: ", ret[i][j][k]["type"]);
+                            if(ret[i][j][k]["type"] == LOOK_TERRAIN){
+                                // then we check if it is a wall
+                                if(ret[i][j][k][LOOK_TERRAIN] == 'wall'){
+                                    wallTotal++;
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                console.log("Wall total: ", wallTotal);
+                var avaibleSlots = 9 - wallTotal;
+                Memory.ResourceMap[sources[z].id] = [avaibleSlots];
             }
 
         }
         
-        var minSource = sources[0].id;
-        var minScreeps = 999; 
-        for (var source in Memory.ResourceMap) {
-            screeps = Memory.ResourceMap[source];
-            console.log(source + ' has ' + screeps + ' screeps active.');
-            if(screeps.length < minScreeps){
-                minScreeps = screeps.length;
-                minSource = source;
+        //find closest avaible spot for screepie
+
+        // sort our sorces by distnace to our creep
+        _.sortBy(sources, s => creep.pos.getRangeTo(s));
+        for(var i in sources){
+
+            console.log("source ", sources[i].id, " has ", Memory.ResourceMap[sources[i].id][0] - (Memory.ResourceMap[sources[i].id].length-1), " avaible slots.");
+            if(Memory.ResourceMap[sources[i].id][0] - (Memory.ResourceMap[sources[i].id].length-1) > 0){
+                // we select any source nearby with a avaible spot
+                Memory.ResourceMap[sources[i].id].push(creep.name);
+                return sources[i].id;
             }
         }
-        console.log("selected ", minSource, " now has ", minScreeps+1);
-        Memory.ResourceMap[minSource].push(creep.name);
-        return minSource;
+
+        // if none are avaible just choose the closest
+        Memory.ResourceMap[sources[0].id].push(creep.name);
+        return sources[0].id;
     },
     /**
      * Removes a creep from the resourcemap list

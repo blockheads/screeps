@@ -88,7 +88,7 @@ module.exports = function() {
 
                 name = roleRepairer.gen();
             }
-            console.log("body ", body, " name ", name, " role ", roleName);
+            //console.log("body ", body, " name ", name, " role ", roleName);
 
             // create creep with the created body and the given role
             return this.createCreep(body, name, { role: roleName});

@@ -33,7 +33,7 @@ var Spawner = {
         if(price > maxEnergy)
                 price = maxEnergy
 
-        console.log("price is currently: ", price);
+        //console.log("price is currently: ", price);
 
         // first creep to spawn
         if(harvesters.length < INITIAL_HARVESTERS){

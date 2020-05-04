@@ -11,17 +11,14 @@ var roleRepairer = {
             creep.memory.repairing = false;
 
             
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (
-                        structure.structureType == STRUCTURE_CONTAINER) &&
-                        structure.store.getCapacity(RESOURCE_ENERGY) > 0;
-                }
+            const containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
+                filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
+                               i.store[RESOURCE_ENERGY] > 0
             });
-            if(targets.length > 0) {
+            if(containersWithEnergy.length > 0) {
                 creep.say('🏧 withdrawing');
                 // store where we want to withdraw from
-                creep.memory.withdraw = targets[0].id;
+                creep.memory.withdraw = containersWithEnergy[0].id;
                 
             }
             else{
@@ -60,8 +57,14 @@ var roleRepairer = {
         else {
             // withdrawing
             if(creep.memory.withdraw){
-                if(creep.withdraw(Game.getObjectById(creep.memory.withdraw), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(Game.getObjectById(creep.memory.withdraw), {visualizePathStyle: {stroke: '#ffffff'}});
+                // check that the store we are withdrawing from isn't 0 now
+                if(Game.getObjectById(creep.memory.withdraw).store[RESOURCE_ENERGY] == 0){
+                    creep.memory.withdraw = null;
+                }
+                else {
+                    if(creep.withdraw(Game.getObjectById(creep.memory.withdraw), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                        creep.moveTo(Game.getObjectById(creep.memory.withdraw), {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
                 }
             }
             // harvesting
