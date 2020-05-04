@@ -105,17 +105,32 @@ var Resource = {
         _.sortBy(sources, s => creep.pos.getRangeTo(s));
         for(var i in sources){
 
-            console.log("source ", sources[i].id, " has ", Memory.ResourceMap[sources[i].id][0] - (Memory.ResourceMap[sources[i].id].length-1), " avaible slots.");
+            console.log("source ", sources[i].id, " has ", Memory.ResourceMap[sources[i].id][0] - (Memory.ResourceMap[sources[i].id].length-1), " available slots.");
             if(Memory.ResourceMap[sources[i].id][0] - (Memory.ResourceMap[sources[i].id].length-1) > 0){
                 // we select any source nearby with a avaible spot
-                Memory.ResourceMap[sources[i].id].push(creep.name);
+                Memory.ResourceMap[sources[i].id].push({name: creep.name, pos: creep.pos});
                 return sources[i].id;
+            }
+            // now its a issue because we are full
+            else{
+                // try to kick out a creep.
+                for(var j=1; j < Memory.ResourceMap[sources[i].id].length; j++){
+                    // if there is a creep that has a longer range than us we take priority
+                    console.log("is ", Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]), " > ", creep.pos.getRangeTo(sources[i]));
+                    if(Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) > creep.pos.getRangeTo(sources[i])){
+                        console.log("Kicking out, " + Memory.ResourceMap[sources[i].id][j].name + " from " + source + " replacing with " + creep.name);
+                        this.DeselectSource(Game.creeps[Memory.ResourceMap[sources[i].id][j].name]);
+                        Memory.ResourceMap[sources[i].id].push({name: creep.name, pos: creep.pos});
+                        return sources[i].id;
+                    }
+                }
             }
         }
 
         // if none are avaible just choose the closest
-        Memory.ResourceMap[sources[0].id].push(creep.name);
-        return sources[0].id;
+        console.log("None available.")
+        Memory.ResourceMap[sources[sources.length -1].id].push({name: creep.name, pos: creep.pos});
+        return sources[sources.length -1].id;
     },
     /**
      * Removes a creep from the resourcemap list
@@ -138,12 +153,17 @@ var Resource = {
             var currentcreeps = Memory.ResourceMap[memory.source].length;
             console.log("Deleting one creep from ", memory.source, " new amount is ", currentcreeps - 1)
             const index = Memory.ResourceMap[memory.source].indexOf(name);
-            if (index > -1) {
-                Memory.ResourceMap[memory.source].splice(index, 1);
+
+            for(var j=1; j < Memory.ResourceMap[memory.source].length; j++){
+                if(Memory.ResourceMap[memory.source][j].name == name){
+                    Memory.ResourceMap[memory.source].splice(j,1)
+                    memory.source = null; 
+                    console.log("deleted ", name, " now ", memory.source, ".");
+                    return;
+                }
             }
-            else{
-                console.log("Failed to delete ", name, " from ", memory.source, " does not exist in list, setting source to null.");
-            }
+
+            console.log("Failed to delete ", name, " from ", memory.source, " does not exist in list, setting source to null.");
             
         }
         memory.source = null; 
