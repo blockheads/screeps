@@ -16,7 +16,7 @@ var roleBuilder = {
             if(containersWithEnergy.length > 0) {
                 creep.say('🏧 withdrawing');
                 // store where we want to withdraw from
-                creep.memory.withdraw = targets[0].id;
+                creep.memory.withdraw = containersWithEnergy[0].id;
                 
             }
             else{
