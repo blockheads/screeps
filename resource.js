@@ -24,22 +24,13 @@ var Resource = {
         // first search for spawns avaible
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_SPAWN &&
+                return (structure.structureType == STRUCTURE_SPAWN ||
+                    structure.structureType == STRUCTURE_EXTENSION  &&
                     structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
             }
         });
         if(targets.length > 0) {
-            return targets[0];
-        }
-
-        // then extenstensions
-        targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
-            }
-        });
-        if(targets.length > 0) {
+            _.sortBy(targets, s => creep.pos.getRangeTo(s));
             return targets[0];
         }
 
@@ -51,6 +42,7 @@ var Resource = {
             }
         });
         if(targets.length > 0) {
+            _.sortBy(targets, s => creep.pos.getRangeTo(s));
             return targets[0];
         }
     },

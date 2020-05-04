@@ -4,13 +4,13 @@ require('prototype.spawn')();
 
 const INITIAL_HARVESTERS = 6;
 const INTIAL_UPGRADERS = 2;
-const INITIAL_REPAIRERS = 1;
+const INITIAL_REPAIRERS = 2;
 const INTIAL_BUILDERS = 0;
 
 const HARVESTERS_MAX = 8;
-const UPGRADERS_MAX = 8;
+const UPGRADERS_MAX = 10;
 const BUILDERS_MAX = 4;
-const REPAIRERS_MAX = 2;
+const REPAIRERS_MAX = 3;
 
 const BASE_CREEP_PRICE = 200;
 
@@ -29,10 +29,11 @@ var Spawner = {
 
         // determining our creep price
         var price = BASE_CREEP_PRICE + totalCreeps*50;
+
         // ensure we don't go overboard here
         if(price > maxEnergy)
                 price = maxEnergy
-
+        
         //console.log("price is currently: ", price);
 
         // first creep to spawn
