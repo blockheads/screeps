@@ -42,8 +42,13 @@ var roleHarvester = {
             }
             else{
                 // ensure that our selected storage isn't full
-                if(creep.transfer(Game.getObjectById(creep.memory.storage), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.memory.storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                if(Game.getObjectById(creep.memory.storage).getFreeCapacity == 0 ){
+                    // just search for a new storage
+                    creep.memory.storage = null;
+                }
+
+                else(creep.transfer(Game.getObjectById(creep.memory.storage), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(Game.getObjectById(creep.memory.storage), {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
             
