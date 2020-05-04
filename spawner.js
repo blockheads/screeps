@@ -28,7 +28,7 @@ var Spawner = {
         var maxEnergy = Game.spawns['Spawn1'].room.energyCapacityAvailable;
 
         // determining our creep price
-        var price = BASE_CREEP_PRICE + totalCreeps*25;
+        var price = BASE_CREEP_PRICE + totalCreeps*50;
         // ensure we don't go overboard here
         if(price > maxEnergy)
                 price = maxEnergy

@@ -14,6 +14,9 @@ for (var source in Memory.ResourceMap) {
     
 }
 
+// this makes kicking significant, if not the resources are near 
+// equidistant so it really doesn't matter anyways
+const KICK_OFFSET = 5;
 
 var Resource = {
 
@@ -116,13 +119,30 @@ var Resource = {
                 // try to kick out a creep.
                 for(var j=1; j < Memory.ResourceMap[sources[i].id].length; j++){
                     // if there is a creep that has a longer range than us we take priority
-                    console.log("is ", Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]), " > ", creep.pos.getRangeTo(sources[i]));
-                    if(Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) > creep.pos.getRangeTo(sources[i])){
+                    // Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) = current creep in maps distance to resource
+                    // creep.pos.getRangeTo(sources[i]) this current creeps distance to the resource
+                    // wait i think this is backwards, idk code works now fuck it lmao. 
+                    console.log("is ", creep.pos.getRangeTo(sources[i]) + KICK_OFFSET, " < ", Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) );
+                    if(creep.pos.getRangeTo(sources[i]) < Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) + KICK_OFFSET ){
                         console.log("Kicking out, " + Memory.ResourceMap[sources[i].id][j].name + " from " + source + " replacing with " + creep.name);
                         this.DeselectSource(Game.creeps[Memory.ResourceMap[sources[i].id][j].name]);
                         Memory.ResourceMap[sources[i].id].push({name: creep.name, pos: creep.pos});
                         return sources[i].id;
                     }
+                    
+                }
+                // otherwise attempt to stack on other's if within kick range
+                for(var j=1; j < Memory.ResourceMap[sources[i].id].length; j++){
+                    // if there is a creep that has a longer range than us we take priority
+                    // Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) = current creep in maps distance to resource
+                    // creep.pos.getRangeTo(sources[i]) this current creeps distance to the resource
+                    console.log("is ", creep.pos.getRangeTo(sources[i]), " < ", Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i]) + KICK_OFFSET);
+                    if(creep.pos.getRangeTo(sources[i]) + KICK_OFFSET < Game.creeps[Memory.ResourceMap[sources[i].id][j].name].pos.getRangeTo(sources[i])){
+                        console.log("adding extra, to ", source, " name:", creep.name);
+                        Memory.ResourceMap[sources[i].id].push({name: creep.name, pos: creep.pos});
+                        return sources[i].id;
+                    }
+                    
                 }
             }
         }
