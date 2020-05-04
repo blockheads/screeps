@@ -17,6 +17,11 @@ var roleHarvester = {
             if(creep.harvest(Game.getObjectById( creep.memory.source)) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById( creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
             }
+
+            // remove storage
+            if(creep.memory.storage){
+                creep.memory.storage = null;
+            }
             
         }
         else {
@@ -41,16 +46,13 @@ var roleHarvester = {
 
             var storage = Game.getObjectById(creep.memory.storage);
             if(storage){
-                console.log("obj: ",storage.store[RESOURCE_ENERGY], " == ", storage.store.getCapacity(RESOURCE_ENERGY));
                 // ensure that our selected storage isn't full
                 if(storage.store[RESOURCE_ENERGY] == storage.store.getCapacity(RESOURCE_ENERGY)){
                     // just search for a new storage
                     creep.memory.storage = null;
-                    console.log("Free cap was 0!");
                 }
 
                 else {
-                    
                     if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
                         creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
