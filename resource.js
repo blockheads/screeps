@@ -3,6 +3,7 @@ if(!Memory.ResourceMap){
     console.log("initialized resource map");
     ResourceMap = new Map();
     Memory.ResourceMap = ResourceMap;
+    
     //console.log("wrote out: ", JSON.stringify(ResourceMap));
 }
 
@@ -13,140 +14,6 @@ for (var source in Memory.ResourceMap) {
     console.log(source + ' has ' + screeps + ' screeps active.');
     
 }
-
-// radius of range of resource mapping to storage
-const RESOURCE_RADIUS = 7;
-
-// this class stores all of our valuable resource data
-// i'm forced to make this because of limited CPU
-// and it absolutely will be more efficent and destroy
-// my awesome dynamic creep resource pathing algorithm
-class ResourceData {
-    /**
-     * Constructs a resource zone.
-     * @param {String} id ID of the resource
-     */
-    constructor(id, room) {
-      this.id =id;
-      // right now we have to get the currently built
-      // extensions around a resource... I guess we'll
-      // leave this in, but with automated registry, they
-      // will get registered as built
-      // initialize this dope shit
-      this.setAvailableSlots(room);
-      this.bindStorage(room);
-    }
-
-    /**
-     * Retrieves the storage elements near a defined resource
-     * this happens per resource in a room once upon
-     * Resource Map instantiation
-     */
-    bindStorage(room){
-        
-        
-        // INITIALIZE OUR LISTS
-        this.storage = [];
-        
-        var mainStorage = [];
-        var towers = [];
-        var containers = [];
-
-        var resource = Game.getObjectById(this.id);
-        var x = resource.pos.x;
-        var y = resource.pos.y;
-
-        // STORAGE (PRIMARY,SECONDARY)
-        console.log("top: ", y-RESOURCE_RADIUS, " left: ", x-RESOURCE_RADIUS, " bottom: ", y+RESOURCE_RADIUS, " left: ", x+RESOURCE_RADIUS);
-        // primary storage        
-        var ret = room.lookAtArea(y-RESOURCE_RADIUS,x-RESOURCE_RADIUS,y+RESOURCE_RADIUS,x+RESOURCE_RADIUS);
-
-        // grab all of our structures within our defined radius
-        for(var i=y-1; i <= y+RESOURCE_RADIUS; i++){
-            for(var j=x-1; j <= x+RESOURCE_RADIUS; j++){
-                
-                // a tile can have multiple objects on it
-                for(var k in ret[i][j]){
-
-                    
-                    if(ret[i][j][k]["type"] == LOOK_STRUCTURES){
-                        // then we check if it is a wall
-                        console.log("current tile: (", j, ',', i, ") ");
-                        console.log("struct: ", ret[i][j][k][LOOK_STRUCTURES]['structureType']);
-                        var storageData = {"id":  ret[i][j][k][LOOK_STRUCTURES]['id'], "available": true, "structureType": ret[i][j][k][LOOK_STRUCTURES]['structureType']};
-                        //console.log("current type: ", ret[i][j][k]["type"]);
-
-                        if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_EXTENSION
-                         ||ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_SPAWN ){
-                            mainStorage.push(storageData);
-                        }
-                        if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_TOWER ){
-                            towers.push(storageData);
-                        }
-                        if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_CONTAINER){
-                            containers.push(storageData);
-                        }
-                    }
-                }
-                
-            }
-        }
-        // our distance function
-        function distanceToSource(store){
-            var x2 = Math.pow(store.pos.x - resource.pos.x, 2);
-            var y2 = Math.pow(store.pos.y - resource.pos.y, 2);
-            return Math.sqrt(x2 + y2);
-        }
-        // sort our arrays
-        mainStorage.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-        towers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-        containers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-
-        this.storage = mainStorage.concat(towers,containers);
-        console.log(JSON.stringify(this.storage));
-        
-
-    }
-
-    setAvailableSlots(room){
-        
-        // AVAIBLE SLOTS
-        // getting our resource
-        var resource = Game.getObjectById(this.id);
-
-        var x = resource.pos.x;
-        var y = resource.pos.y;
-        
-        // calculating avaible slots for a given resource
-        var ret = room.lookAtArea(y-1,x-1,y+1,x+1);
-                
-        var wallTotal = 0;
-
-        for(var i=y-1; i <= y+1; i++){
-            for(var j=x-1; j <= x+1; j++){
-                
-                //console.log("current tile: (", j, ',', i, ") ");
-                // a tile can have multiple objects on it
-                for(var k in ret[i][j]){
-                    //console.log("current type: ", ret[i][j][k]["type"]);
-                    if(ret[i][j][k]["type"] == LOOK_TERRAIN){
-                        // then we check if it is a wall
-                        if(ret[i][j][k][LOOK_TERRAIN] == 'wall'){
-                            wallTotal++;
-                        }
-                    }
-                }
-                
-            }
-        }
-
-        this.avaibleSlots = 9-wallTotal;
-    }
-    
-}
-
-// TESTING
-new ResourceData('5bbcaa7e9099fc012e63179d', Game.rooms['W47S15']);
 
 // this makes kicking significant, if not the resources are near 
 // equidistant so it really doesn't matter anyways
@@ -193,13 +60,15 @@ var Resource = {
     /**
      * returns a optimal Energy resource to retrieve 
      * given a screepy lad.
+     * UNUSED METHOD, THIS IS A EXAMPLE OF HOW NOT TO PROGRAM SOMETHING
+     * ACTUALLY, IT'S PRETTY DOPE BUT IT USES UP HELLA CPU.
      * @param {Room} room ro
      */
     findOptimalSource: function(creep){
         
         // look at all of our current Active Sources
         var sources = creep.room.find(FIND_SOURCES_ACTIVE);
-        
+        Memory.DebugMap = new Map();
         // check if this source has been initialized in our resource map
         for(var z in sources){
             
@@ -234,9 +103,6 @@ var Resource = {
                 var avaibleSlots = 9 - wallTotal;
                 Memory.ResourceMap[sources[z].id] = [avaibleSlots];
             }
-
-            Memory.DebugMap = new Map();
-            Memory.DebugMap[sources[z].id] = new ResourceData(sources[z].id, creep.room);
 
         }
         

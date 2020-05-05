@@ -1,6 +1,7 @@
 const { clamp, max } = require('lodash');
 
 require('prototype.spawn')();
+const ResourceData = require('resourceData');
 
 const INITIAL_HARVESTERS = 6;
 const INTIAL_UPGRADERS = 2;
@@ -35,15 +36,26 @@ var Spawner = {
                 price = maxEnergy
         
         //console.log("price is currently: ", price);
-
+        /*
+        for(var i in Memory.DebugMap){
+            console.log(JSON.stringify(Memory.DebugMap[i]));
+            let resourceData = new ResourceData();
+            if(resourceData.call.shouldAddCreep(Memory.DebugMap[i])){
+                return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', Memory.DebugMap[i]);
+            }
+            
+        }
+        */
         // first creep to spawn
         if(harvesters.length < INITIAL_HARVESTERS){
             price = BASE_CREEP_PRICE + harvesters.length*25;
             // ensure we don't go overboard here
             if(price > maxEnergy)
                 price = maxEnergy
-
+            
+            //getting our source
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
+            
 
             if(ret == 0)
                 console.log('Spawning new harvester: ' + newName);

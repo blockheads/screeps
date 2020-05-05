@@ -12,7 +12,7 @@ var roleHarvester = {
             
             if(!creep.memory.source){
                 creep.memory.source = resource.findOptimalSource(creep);
-                //console.log("selected optimal source " + creep.memory.source);
+                console.log("selected optimal source " + creep.memory.source);
             }
             if(creep.harvest(Game.getObjectById( creep.memory.source)) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById( creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
@@ -28,11 +28,11 @@ var roleHarvester = {
             //hauling
 
             // delete from memory if we must
-            if(creep.memory.source){
-                console.log("deselecting my source is currently: ", creep.memory.source, " ", creep.name);
-                resource.DeselectSource(creep);
-                console.log("my source is now ", creep.memory.source);
-            }
+            // if(creep.memory.source){
+            //     console.log("deselecting my source is currently: ", creep.memory.source, " ", creep.name);
+            //     resource.DeselectSource(creep);
+            //     console.log("my source is now ", creep.memory.source);
+            // }
            
                 
             // if we don't have any storage selected

@@ -22,6 +22,7 @@ module.exports.loop = function () {
         }
     }
     
+    
     // spawns our screepies
     Spawner.spawn();
     

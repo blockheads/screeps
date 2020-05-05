@@ -6,7 +6,7 @@ const roleHarvester = require("./role.harvester");
 module.exports = function() {
     // create a new function for StructureSpawn
     StructureSpawn.prototype.createCustomCreep =
-        function(energy, roleName) {
+        function(energy, roleName, opt=null) {
             // create a balanced body as big as possible with the given energy
             var numberOfParts = Math.floor(energy / 200);
             var body = [];
@@ -91,6 +91,9 @@ module.exports = function() {
             //console.log("body ", body, " name ", name, " role ", roleName);
 
             // create creep with the created body and the given role
-            return this.createCreep(body, name, { role: roleName});
+            if(!opt)
+                return this.createCreep(body, name, { role: roleName});
+            opt.addCreep(name);
+            return this.createCreep(body, name, { role: roleName, source: opt.id});
         };
 };
