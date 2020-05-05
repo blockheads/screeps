@@ -12,7 +12,7 @@ var roleHarvester = {
             
             if(!creep.memory.source){
                 creep.memory.source = resource.findOptimalSource(creep);
-                console.log("selected optimal source " + creep.memory.source);
+                //console.log("selected optimal source " + creep.memory.source);
             }
             if(creep.harvest(Game.getObjectById( creep.memory.source)) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById( creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});

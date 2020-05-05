@@ -7,8 +7,8 @@ const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 2;
 const INTIAL_BUILDERS = 0;
 
-const HARVESTERS_MAX = 8;
-const UPGRADERS_MAX = 10;
+const HARVESTERS_MAX = 6;
+const UPGRADERS_MAX = 8;
 const BUILDERS_MAX = 4;
 const REPAIRERS_MAX = 3;
 

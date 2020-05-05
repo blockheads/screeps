@@ -25,7 +25,7 @@ var roleRepairer = {
                 creep.say('🔄 harvest');
 
                 creep.memory.source = resource.findOptimalSource(creep);
-                console.log("found optimal source " + creep.memory.source);
+                //console.log("found optimal source " + creep.memory.source);
                 
             }
 
