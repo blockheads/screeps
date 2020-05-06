@@ -2,11 +2,15 @@ const roleBuilder = require("./role.builder");
 const roleUpgrader = require("./role.upgrader");
 const roleRepairer = require("./role.repairer");
 const roleHarvester = require("./role.harvester");
+const ResourceDataHandler = require('resourceDataHandler');
 
 module.exports = function() {
     // create a new function for StructureSpawn
     StructureSpawn.prototype.createCustomCreep =
-        function(energy, roleName, opt=null) {
+        function(energy, roleName, opt) {
+            console.log("now i am ", opt);
+            if (typeof opt === 'undefined') { opt = null; }
+
             // create a balanced body as big as possible with the given energy
             var numberOfParts = Math.floor(energy / 200);
             var body = [];
@@ -91,9 +95,18 @@ module.exports = function() {
             //console.log("body ", body, " name ", name, " role ", roleName);
 
             // create creep with the created body and the given role
-            if(!opt)
+            if(opt == null){
                 return this.createCreep(body, name, { role: roleName});
-            opt.addCreep(name);
-            return this.createCreep(body, name, { role: roleName, source: opt.id});
+                
+            }
+                
+            var ret = this.createCreep(body, name, { role: roleName, source: Memory.DebugMap[opt].id});
+
+            if(ret == name){
+                ResourceDataHandler.addCreep.call(Memory.DebugMap[opt],name);
+                console.log("adding custom creep ", name);
+            }
+                
+            return ret;
         };
 };

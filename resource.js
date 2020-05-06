@@ -68,7 +68,7 @@ var Resource = {
         
         // look at all of our current Active Sources
         var sources = creep.room.find(FIND_SOURCES_ACTIVE);
-        Memory.DebugMap = new Map();
+
         // check if this source has been initialized in our resource map
         for(var z in sources){
             
@@ -176,17 +176,26 @@ var Resource = {
             
             var currentcreeps = Memory.ResourceMap[memory.source].length;
             //console.log("Deleting one creep from ", memory.source, " new amount is ", currentcreeps - 1)
-            const index = Memory.ResourceMap[memory.source].indexOf(name);
 
             for(var j=1; j < Memory.ResourceMap[memory.source].length; j++){
                 if(Memory.ResourceMap[memory.source][j].name == name){
                     Memory.ResourceMap[memory.source].splice(j,1)
                     memory.source = null; 
                     //console.log("deleted ", name, " now ", memory.source, ".");
-                    return;
+                    break;
                 }
             }
 
+            // deleting from other lad too
+            for(var j=1; j < Memory.DebugMap[memory.source].length; j++){
+                if(Memory.DebugMap[memory.source][j].name == name){
+                    Memory.DebugMap[memory.source].splice(j,1)
+                    memory.source = null; 
+                    //console.log("deleted ", name, " now ", memory.source, ".");
+                    return;
+                }
+            }
+            
             //console.log("Failed to delete ", name, " from ", memory.source, " does not exist in list, setting source to null.");
             
         }

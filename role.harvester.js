@@ -12,7 +12,7 @@ var roleHarvester = {
             
             if(!creep.memory.source){
                 creep.memory.source = resource.findOptimalSource(creep);
-                console.log("selected optimal source " + creep.memory.source);
+                //console.log("selected optimal source " + creep.memory.source);
             }
             if(creep.harvest(Game.getObjectById( creep.memory.source)) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById( creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
@@ -38,7 +38,7 @@ var roleHarvester = {
             // if we don't have any storage selected
             if(!creep.memory.storage){
                 creep.memory.storage = resource.findOptimalStorage(creep).id;
-                console.log("found optimal storage: ", creep.memory.storage);
+                //console.log("found optimal storage: ", creep.memory.storage);
                 // no avaible storage to be found, just excute roleUpgrader code.
                 // might want to add a delay so this doesn't use all of our cpu
                 

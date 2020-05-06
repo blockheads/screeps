@@ -1,14 +1,14 @@
 const { clamp, max } = require('lodash');
 
 require('prototype.spawn')();
-const ResourceData = require('resourceData');
+require('resourceData');  
+const ResourceDataHandler = require('resourceDataHandler');
 
-const INITIAL_HARVESTERS = 6;
+const INITIAL_HARVESTERS = 3;
 const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 2;
 const INTIAL_BUILDERS = 0;
 
-const HARVESTERS_MAX = 6;
 const UPGRADERS_MAX = 8;
 const BUILDERS_MAX = 4;
 const REPAIRERS_MAX = 3;
@@ -36,17 +36,19 @@ var Spawner = {
                 price = maxEnergy
         
         //console.log("price is currently: ", price);
-        /*
+        
         for(var i in Memory.DebugMap){
-            console.log(JSON.stringify(Memory.DebugMap[i]));
-            let resourceData = new ResourceData();
-            if(resourceData.call.shouldAddCreep(Memory.DebugMap[i])){
-                return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', Memory.DebugMap[i]);
-            }
+            console.log("spawning: ", JSON.stringify(Memory.DebugMap[i]));
             
+            var ret = -10;
+            if(ResourceDataHandler.shouldAddCreep.call(Memory.DebugMap[i])){
+                return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', i);
+            }
+
         }
-        */
-        // first creep to spawn
+        
+        // failsafe, in case ^ breaks when colony dies out for some reason
+        // don't think it will but i'm really tired rn
         if(harvesters.length < INITIAL_HARVESTERS){
             price = BASE_CREEP_PRICE + harvesters.length*25;
             // ensure we don't go overboard here
@@ -81,12 +83,12 @@ var Spawner = {
                 console.log('Spawning new builder: ' + newName);
         }
 
-        else if(harvesters.length < HARVESTERS_MAX){
+        // else if(harvesters.length < HARVESTERS_MAX){
 
-            var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
-            if(ret == 0)
-                console.log('Spawning new repairer: ' + newName);
-        }
+        //     var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
+        //     if(ret == 0)
+        //         console.log('Spawning new repairer: ' + newName);
+        // }
         else if(upgraders.length < UPGRADERS_MAX) {
             
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'upgrader');

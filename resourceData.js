@@ -1,3 +1,5 @@
+const ResourceDataHandler = require('resourceDataHandler');
+
 const RESOURCE_RADIUS = 7;
 const CREEP_PER_ENERGY = 150;
 // this class stores all of our valuable resource data
@@ -23,7 +25,7 @@ class ResourceData {
 
       this.setAvailableSlots(room, source);
       this.updateStorage(room, source);
-      this.update();
+      ResourceDataHandler.update.call(this);
     }
 
     /**
@@ -132,43 +134,17 @@ class ResourceData {
 
         this.availableSlots = 9-wallTotal;
     }
-    
-    update(){
-        this.updateTotalStore();
-    }
-
-    updateTotalStore(){
-        this.totalStore = 0;
-        for(var i in this.storage){
-            if(this.storage[i].structureType == STRUCTURE_TOWER)
-                this.totalStore += Game.getObjectById(this.storage[i].id).store.getCapacity();
-            else
-                this.totalStore += Game.getObjectById(this.storage[i].id).store.getCapacity(RESOURCE_ENERGY);
-        }
-    }
-
-    shouldAddCreep(){
-        if(this.creeps.length*150 < this.totalStore){
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Method which returns boolean determining if this source
-     * zone needs another harvester based on it's total score
-     * and active creeps
-     */
-    addCreep(creepName){   
-        this.creeps.push(creepName);
-
-    }
 
 }
 
-var roomSources =  Game.rooms['W47S15'].find(FIND_SOURCES_ACTIVE);
-for(var i in roomSources){
-    Memory.DebugMap[roomSources[i].id] =  new ResourceData(roomSources[i], Game.rooms['W47S15']);
-}
+if(!Memory.DebugMap[0]){
+
+    var roomSources =  Game.rooms['W47S15'].find(FIND_SOURCES_ACTIVE);
+    for(var i in roomSources){
+        console.log("creating debug map");
+        Memory.DebugMap[roomSources[i].id] =  new ResourceData(roomSources[i], Game.rooms['W47S15']);
+        console.log("done");
+    }
+} 
 
 module.exports = ResourceData;
