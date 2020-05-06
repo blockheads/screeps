@@ -8,7 +8,7 @@ var roleBuilder = {
 
         if(creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
-            
+
             const containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
                 filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
                                i.store[RESOURCE_ENERGY] > 0

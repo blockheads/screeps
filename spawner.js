@@ -4,10 +4,9 @@ require('prototype.spawn')();
 require('resourceData');  
 const ResourceDataHandler = require('resourceDataHandler');
 
-const INITIAL_HARVESTERS = 3;
 const INTIAL_UPGRADERS = 2;
-const INITIAL_REPAIRERS = 2;
-const INTIAL_BUILDERS = 0;
+const INITIAL_REPAIRERS = 1;
+const INTIAL_BUILDERS = 1;
 
 const UPGRADERS_MAX = 8;
 const BUILDERS_MAX = 4;
@@ -27,6 +26,7 @@ var Spawner = {
 
         var totalCreeps = harvesters.length + upgraders.length + builders.length + repairers.length;
         var maxEnergy = Game.spawns['Spawn1'].room.energyCapacityAvailable;
+        var currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
 
         // determining our creep price
         var price = BASE_CREEP_PRICE + totalCreeps*50;
@@ -36,33 +36,43 @@ var Spawner = {
                 price = maxEnergy
         
         //console.log("price is currently: ", price);
-        
-        for(var i in Memory.DebugMap){
-            console.log("spawning: ", JSON.stringify(Memory.DebugMap[i]));
-            
-            var ret = -10;
-            if(ResourceDataHandler.shouldAddCreep.call(Memory.DebugMap[i])){
-                return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', i);
-            }
 
+        // not going to try and spawn a creep if we don't have the energy
+        if(currentEnergy < price){
+            return;
         }
         
+        // get's the source w/ least creeps that can add creeps
+        var minCreeps = 999;
+        var SourceIndex = -1;
+        for(var i in Memory.DebugMap){
+            
+            if(Memory.DebugMap[i].creeps.length < minCreeps && ResourceDataHandler.shouldAddCreep.call(Memory.DebugMap[i])){
+                minCreeps = Memory.DebugMap[i].creeps.length;
+                SourceIndex = i;
+            }
+                
+        }
+        if(SourceIndex != -1){
+            console.log("spawning: ", JSON.stringify(Memory.DebugMap[i]));
+            return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', i);
+        }
         // failsafe, in case ^ breaks when colony dies out for some reason
         // don't think it will but i'm really tired rn
-        if(harvesters.length < INITIAL_HARVESTERS){
-            price = BASE_CREEP_PRICE + harvesters.length*25;
-            // ensure we don't go overboard here
-            if(price > maxEnergy)
-                price = maxEnergy
+        // if(harvesters.length < INITIAL_HARVESTERS){
+        //     price = BASE_CREEP_PRICE + harvesters.length*25;
+        //     // ensure we don't go overboard here
+        //     if(price > maxEnergy)
+        //         price = maxEnergy
             
-            //getting our source
-            var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
+        //     //getting our source
+        //     var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
             
 
-            if(ret == 0)
-                console.log('Spawning new harvester: ' + newName);
-        }
-        else if(repairers.length < INITIAL_REPAIRERS) {
+        //     if(ret == 0)
+        //         console.log('Spawning new harvester: ' + newName);
+        // }
+        if(repairers.length < INITIAL_REPAIRERS) {
             
 
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'repairer');

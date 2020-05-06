@@ -1,3 +1,5 @@
+const CREEP_PER_ENERGY = 200;
+
 var ResourceDataHandler = {
 
     updateTotalStore: function(){
@@ -15,7 +17,7 @@ var ResourceDataHandler = {
     },
     
     shouldAddCreep: function(){
-        if(this.creeps.length*150 < this.totalStore){
+        if(this.creeps.length*200 < this.totalStore){
             return true;
         }
         return false;

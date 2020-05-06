@@ -1,7 +1,6 @@
 const ResourceDataHandler = require('resourceDataHandler');
 
 const RESOURCE_RADIUS = 7;
-const CREEP_PER_ENERGY = 150;
 // this class stores all of our valuable resource data
 // i'm forced to make this because of limited CPU
 // and it absolutely will be more efficent and destroy
@@ -137,7 +136,7 @@ class ResourceData {
 
 }
 
-if(!Memory.DebugMap[0]){
+if(!Memory.DebugMap){
 
     var roomSources =  Game.rooms['W47S15'].find(FIND_SOURCES_ACTIVE);
     for(var i in roomSources){

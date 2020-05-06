@@ -10,18 +10,18 @@ var roleHarvester = {
         if(creep.store.getFreeCapacity() > 0) {
             // Check if we have selected a source yet
             
-            if(!creep.memory.source){
-                creep.memory.source = resource.findOptimalSource(creep);
-                //console.log("selected optimal source " + creep.memory.source);
-            }
+            // if(!creep.memory.source){
+            //     creep.memory.source = resource.findOptimalSource(creep);
+            //     //console.log("selected optimal source " + creep.memory.source);
+            // }
             if(creep.harvest(Game.getObjectById( creep.memory.source)) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(Game.getObjectById( creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 
-            // remove storage
-            if(creep.memory.storage){
-                creep.memory.storage = null;
-            }
+            // // remove storage
+            // if(creep.memory.storage){
+            //     creep.memory.storage = null;
+            // }
             
         }
         else {
@@ -36,16 +36,28 @@ var roleHarvester = {
            
                 
             // if we don't have any storage selected
-            if(!creep.memory.storage){
-                creep.memory.storage = resource.findOptimalStorage(creep).id;
-                //console.log("found optimal storage: ", creep.memory.storage);
-                // no avaible storage to be found, just excute roleUpgrader code.
-                // might want to add a delay so this doesn't use all of our cpu
+            // if(!creep.memory.storage){
+            //     creep.memory.storage = resource.findOptimalStorage(creep).id;
+            //     //console.log("found optimal storage: ", creep.memory.storage);
+            //     // no avaible storage to be found, just excute roleUpgrader code.
+            //     // might want to add a delay so this doesn't use all of our cpu
                 
-            }
+            // }
 
-            var storage = Game.getObjectById(creep.memory.storage);
-            if(storage){
+            //var storage = Game.getObjectById(creep.memory.storage);
+            if(!creep.memory.storage){
+                for(var i in Memory.DebugMap[creep.memory.source].storage){
+                    var storage = Game.getObjectById( Memory.DebugMap[creep.memory.source].storage[i].id);
+                    if(storage.store[RESOURCE_ENERGY] < storage.store.getCapacity(RESOURCE_ENERGY)){
+                        creep.memory.storage = storage.id;
+                        console.log("creep ", creep.name, "selected storage ", storage.id);
+                        break;
+                    }
+                        
+                }
+            }
+            else{
+                storage = Game.getObjectById(creep.memory.storage);
                 // ensure that our selected storage isn't full
                 if(storage.store[RESOURCE_ENERGY] == storage.store.getCapacity(RESOURCE_ENERGY)){
                     // just search for a new storage
@@ -58,9 +70,6 @@ var roleHarvester = {
                     }
                         
                 }
-            }
-            else{
-                roleUpgrader.run(creep);
             }
                 
         }

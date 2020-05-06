@@ -180,7 +180,7 @@ var Resource = {
             for(var j=1; j < Memory.ResourceMap[memory.source].length; j++){
                 if(Memory.ResourceMap[memory.source][j].name == name){
                     Memory.ResourceMap[memory.source].splice(j,1)
-                    memory.source = null; 
+                    
                     //console.log("deleted ", name, " now ", memory.source, ".");
                     break;
                 }
