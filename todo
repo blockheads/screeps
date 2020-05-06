@@ -10,3 +10,6 @@ just do a update for that room.
     I did this, but I think it might be usefull to think about programming something that detects incremental changes, or something different because I believe this is a pretty
     intensive function. IE, you don't have to look through all the storage bois, and sort them over again, instead just check against what's new and add them to the list
     somehow.
+
+-----
+issue is, harvester should have priority over other creeps

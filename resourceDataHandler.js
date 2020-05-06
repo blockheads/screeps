@@ -1,5 +1,5 @@
 const CREEP_PER_ENERGY = 150;
-const RESOURCE_RADIUS = 7;
+const RESOURCE_RADIUS = 10;
 
 var ResourceDataHandler = {
 

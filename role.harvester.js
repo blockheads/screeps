@@ -7,7 +7,8 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.memory.mining) {
+        if(creep.memory.mining && !creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
+            creep.memory.storage = null; 
             // Check if we have selected a source yet
             
             // if(!creep.memory.source){
@@ -25,10 +26,13 @@ var roleHarvester = {
             
         }
         else {
+            creep.memory.mining = false;
             // if we aren't mining get our current carry 
             var carry = creep.carry.getUsedCapacity(RESOURCE_ENERGY);
+            //console.log("creep ", creep.name, " carry ", carry);
             if(carry == 0){
                 // mining
+                //console.log("creep ", creep.name, " carry ", carry, " mining now.");
                 creep.memory.mining = true;
             }
             else{
@@ -72,17 +76,23 @@ var roleHarvester = {
                         // just search for a new storage
                         creep.memory.selectedStorage = null;
                     }
-    
                     
-                    if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                    var ret = creep.transfer(storage, RESOURCE_ENERGY)
+                    
+                    if( ret == ERR_NOT_IN_RANGE){
                         creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
-                            
+                    
+                    // null out and move to the next available storage element
+                    if( ret == 0 ){
+                        creep.memory.selectedStorage = null;
+                    }
                     
                 }
                 else{
                     //
                     console.log("Nothing to do for ", creep.name);
+                    creep.memory.storage = null; 
                 }
             }
             
