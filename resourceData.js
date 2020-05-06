@@ -1,6 +1,6 @@
 const ResourceDataHandler = require('resourceDataHandler');
 
-const RESOURCE_RADIUS = 7;
+
 // this class stores all of our valuable resource data
 // i'm forced to make this because of limited CPU
 // and it absolutely will be more efficent and destroy
@@ -23,81 +23,7 @@ class ResourceData {
       this.creeps = [];
 
       this.setAvailableSlots(room, source);
-      this.updateStorage(room, source);
-      ResourceDataHandler.update.call(this);
-    }
-
-    /**
-     * Retrieves the storage elements near a defined resource
-     * this happens per resource in a room once upon
-     * Resource Map instantiation
-     */
-    updateStorage(room, resource){
-        
-        
-        // INITIALIZE OUR LISTS
-        this.storage = [];
-        
-        var mainStorage = [];
-        var towers = [];
-        var containers = [];
-
-        var x = resource.pos.x;
-        var y = resource.pos.y;
-
-        // STORAGE (PRIMARY,SECONDARY)
-        console.log("top: ", y-RESOURCE_RADIUS, " left: ", x-RESOURCE_RADIUS, " bottom: ", y+RESOURCE_RADIUS, " left: ", x+RESOURCE_RADIUS);
-        // primary storage        
-        var ret = room.lookAtArea(y-RESOURCE_RADIUS,x-RESOURCE_RADIUS,y+RESOURCE_RADIUS,x+RESOURCE_RADIUS);
-
-        // grab all of our structures within our defined radius
-        for(var i=y-RESOURCE_RADIUS; i <= y+RESOURCE_RADIUS; i++){
-            for(var j=x-RESOURCE_RADIUS; j <= x+RESOURCE_RADIUS; j++){
-                
-                // a tile can have multiple objects on it
-                for(var k in ret[i][j]){
-                 
-                    //console.log("current tile: (", j, ',', i, ") ");
-                    //console.log(ret[i][j][k]["type"]);
-                
-                   
-                    if(ret[i][j][k]["type"] == LOOK_STRUCTURES){
-                        // then we check if it is a wall
-                        
-                        //console.log("struct: ", ret[i][j][k][LOOK_STRUCTURES]['structureType']);
-                        var storageData = {"id":  ret[i][j][k][LOOK_STRUCTURES]['id'], "available": true, "structureType": ret[i][j][k][LOOK_STRUCTURES]['structureType']};
-                        //console.log("current type: ", ret[i][j][k]["type"]);
-
-                        if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_EXTENSION
-                         ||ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_SPAWN ){
-                            mainStorage.push(storageData);
-                        }
-                        if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_TOWER ){
-                            towers.push(storageData);
-                        }
-                        if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_CONTAINER){
-                            containers.push(storageData);
-                        }
-                    }
-                }
-                
-            }
-        }
-        // our distance function
-        function distanceToSource(store){
-            var x2 = Math.pow(store.pos.x - resource.pos.x, 2);
-            var y2 = Math.pow(store.pos.y - resource.pos.y, 2);
-            return Math.sqrt(x2 + y2);
-        }
-        // sort our arrays
-        mainStorage.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-        towers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-        containers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-
-        this.storage = mainStorage.concat(towers,containers);
-        console.log(JSON.stringify(this.storage));
-        
-
+      ResourceDataHandler.update.call(this, room, source);
     }
 
     setAvailableSlots(room, resource){
@@ -137,8 +63,8 @@ class ResourceData {
 }
 
 if(!Memory.DebugMap){
-
-    var roomSources =  Game.rooms['W47S15'].find(FIND_SOURCES_ACTIVE);
+    Memory.DebugMap = new Map();
+    var roomSources =  Game.rooms['W47S15'].find(FIND_SOURCES);
     for(var i in roomSources){
         console.log("creating debug map");
         Memory.DebugMap[roomSources[i].id] =  new ResourceData(roomSources[i], Game.rooms['W47S15']);

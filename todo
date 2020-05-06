@@ -1,2 +1,12 @@
 Need to make use of available, choosing a storage from the list is lagging the shit out of the game lmao.
 update everything else to use zones... going to be tough.
+
+change back code you set price to >800, change it back to MaxEnergy.
+
+also i broke optimal path with this new patch, so i'm just using it to get the shortest distance atm.
+
+when looking to update the information on the stores (updateTotalStore()), just call it when the spawn getTotalStorage changes. Cache it in memory, and if it changed, then
+just do a update for that room. 
+    I did this, but I think it might be usefull to think about programming something that detects incremental changes, or something different because I believe this is a pretty
+    intensive function. IE, you don't have to look through all the storage bois, and sort them over again, instead just check against what's new and add them to the list
+    somehow.

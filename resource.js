@@ -110,6 +110,7 @@ var Resource = {
 
         // sort our sorces by distnace to our creep
         _.sortBy(sources, s => creep.pos.getRangeTo(s));
+        return sources[sources.length -1].id;
         for(var i in sources){
 
             //console.log("source ", sources[i].id, " has ", Memory.ResourceMap[sources[i].id][0] - (Memory.ResourceMap[sources[i].id].length-1), " available slots.");
@@ -174,12 +175,12 @@ var Resource = {
         if( memory.source != null && Memory.ResourceMap[memory.source]){
             // delete it from the creep, set it null.
             
-            var currentcreeps = Memory.ResourceMap[memory.source].length;
+            //var currentcreeps = Memory.ResourceMap[memory.source].length;
             //console.log("Deleting one creep from ", memory.source, " new amount is ", currentcreeps - 1)
 
             for(var j=1; j < Memory.ResourceMap[memory.source].length; j++){
                 if(Memory.ResourceMap[memory.source][j].name == name){
-                    Memory.ResourceMap[memory.source].splice(j,1)
+                    Memory.ResourceMap[memory.source].splice(j,1);
                     
                     //console.log("deleted ", name, " now ", memory.source, ".");
                     break;
@@ -187,9 +188,10 @@ var Resource = {
             }
 
             // deleting from other lad too
-            for(var j=1; j < Memory.DebugMap[memory.source].length; j++){
-                if(Memory.DebugMap[memory.source][j].name == name){
-                    Memory.DebugMap[memory.source].splice(j,1)
+            for(var j=0; j < Memory.DebugMap[memory.source]['creeps'].length; j++){
+                // iterate over our creep array
+                if(Memory.DebugMap[memory.source]['creeps'][j] == name){
+                    Memory.DebugMap[memory.source]['creeps'].splice(j,1);
                     memory.source = null; 
                     //console.log("deleted ", name, " now ", memory.source, ".");
                     return;

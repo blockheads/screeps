@@ -26,13 +26,35 @@ var Spawner = {
 
         var totalCreeps = harvesters.length + upgraders.length + builders.length + repairers.length;
         var maxEnergy = Game.spawns['Spawn1'].room.energyCapacityAvailable;
+        // caching our max energy, it also determines if we should check for updates
+        if(!Memory.maxEnergy || maxEnergy != Memory.maxEnergy){
+
+            console.log("Max Energy updated... updating");
+            for(var i in Memory.DebugMap){
+                ResourceDataHandler.update.call(Memory.DebugMap[i], Game.spawns['Spawn1'].room, Game.getObjectById(i));    
+            }
+
+            Memory.maxEnergy = maxEnergy;
+            
+        }
+
         var currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
+        // caching out current energy as well
+        //if(!Memory.currentEnergy || currentEnergy != Memory.currentEnergy){
+            //if(currentEnergy < Memory.currentEnergy){
+            console.log("updating available storage.");
+            for(var i in Memory.DebugMap){
+                ResourceDataHandler.updateAvailable.call(Memory.DebugMap[i], i);
+                //}
+            }
+            Memory.currentEnergy = currentEnergy;
+        //}
 
         // determining our creep price
         var price = BASE_CREEP_PRICE + totalCreeps*50;
 
         // ensure we don't go overboard here
-        if(price > maxEnergy)
+        if(price > 800)
                 price = maxEnergy
         
         //console.log("price is currently: ", price);
@@ -54,8 +76,8 @@ var Spawner = {
                 
         }
         if(SourceIndex != -1){
-            console.log("spawning: ", JSON.stringify(Memory.DebugMap[i]));
-            return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', i);
+            console.log("spawning: ", JSON.stringify(Memory.DebugMap[SourceIndex]));
+            return Game.spawns['Spawn1'].createCustomCreep(price,'harvester', SourceIndex);
         }
         // failsafe, in case ^ breaks when colony dies out for some reason
         // don't think it will but i'm really tired rn
