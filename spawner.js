@@ -40,15 +40,16 @@ var Spawner = {
 
         var currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
         // caching out current energy as well
-        //if(!Memory.currentEnergy || currentEnergy != Memory.currentEnergy){
-            //if(currentEnergy < Memory.currentEnergy){
-            console.log("updating available storage.");
-            for(var i in Memory.DebugMap){
-                ResourceDataHandler.updateAvailable.call(Memory.DebugMap[i], i);
-                //}
+        if(!Memory.currentEnergy || currentEnergy != Memory.currentEnergy){
+            if(currentEnergy < Memory.currentEnergy){
+                console.log("updating available storage.");
+
+                for(var i in Memory.DebugMap){
+                    ResourceDataHandler.updateAvailable.call(Memory.DebugMap[i], i);
+                }
             }
             Memory.currentEnergy = currentEnergy;
-        //}
+        }
 
         // determining our creep price
         var price = BASE_CREEP_PRICE + totalCreeps*50;
