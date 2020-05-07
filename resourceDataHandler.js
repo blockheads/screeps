@@ -6,10 +6,9 @@ var ResourceDataHandler = {
     updateTotalStore: function(){
         this.totalStore = 0;
         for(var i in this.storage){
-            if(this.storage[i].structureType == STRUCTURE_TOWER)
-                this.totalStore += Game.getObjectById(this.storage[i].id).store.getCapacity();
-            else
-                this.totalStore += Game.getObjectById(this.storage[i].id).store.getCapacity(RESOURCE_ENERGY);
+            if(this.storage[i].structureType != STRUCTURE_TOWER && this.storage[i].structureType != STRUCTURE_CONTAINER && this.storage[i].structureType != STRUCTURE_STORAGE){
+                this.totalStore += Game.getObjectById(this.storage[i].id).store.getCapacity(RESOURCE_ENERGY);            
+            }
         }
     },
 

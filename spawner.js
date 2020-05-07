@@ -69,7 +69,7 @@ var Spawner = {
         var minCreeps = 999;
         var SourceIndex = -1;
         for(var i in Memory.DebugMap){
-            
+            console.log("should add creep: ", ResourceDataHandler.shouldAddCreep.call(Memory.DebugMap[i]));
             if(Memory.DebugMap[i].creeps.length < minCreeps && ResourceDataHandler.shouldAddCreep.call(Memory.DebugMap[i])){
                 minCreeps = Memory.DebugMap[i].creeps.length;
                 SourceIndex = i;
