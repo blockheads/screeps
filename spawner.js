@@ -8,9 +8,9 @@ const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 1;
 const INTIAL_BUILDERS = 1;
 
-const UPGRADERS_MAX = 8;
-const BUILDERS_MAX = 4;
-const REPAIRERS_MAX = 3;
+const UPGRADERS_MAX = 4;
+const BUILDERS_MAX = 2;
+const REPAIRERS_MAX = 2;
 
 const BASE_CREEP_PRICE = 200;
 
@@ -41,18 +41,18 @@ var Spawner = {
         var currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
         // caching out current energy as well
         if(!Memory.currentEnergy || currentEnergy != Memory.currentEnergy){
-            if(currentEnergy < Memory.currentEnergy){
-                console.log("updating available storage.");
+         
+            console.log("updating available storage.");
 
-                for(var i in Memory.DebugMap){
-                    ResourceDataHandler.updateAvailable.call(Memory.DebugMap[i], i);
-                }
+            for(var i in Memory.DebugMap){
+                ResourceDataHandler.updateAvailable.call(Memory.DebugMap[i], i);
             }
+            
             Memory.currentEnergy = currentEnergy;
         }
 
         // determining our creep price
-        var price = BASE_CREEP_PRICE + totalCreeps*50;
+        var price = BASE_CREEP_PRICE + totalCreeps*100;
 
         // ensure we don't go overboard here
         if(price > maxEnergy)

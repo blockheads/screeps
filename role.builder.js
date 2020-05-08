@@ -15,6 +15,7 @@ var roleBuilder = {
             });
             if(containersWithEnergy.length > 0) {
                 creep.say('🏧 withdrawing');
+                containersWithEnergy = _.containersWithEnergy(targets, s => creep.pos.getRangeTo(s)).reverse();
                 // store where we want to withdraw from
                 creep.memory.withdraw = containersWithEnergy[0].id;
                 
@@ -33,7 +34,6 @@ var roleBuilder = {
             creep.memory.building = true;
             creep.say('🚧 build');
             creep.memory.withdraw = null;
-            resource.DeselectSource(creep);
         }
 
         if(creep.memory.building) {
@@ -41,7 +41,7 @@ var roleBuilder = {
             if(targets.length) {
                 var target = null;
                 // this is a little slow
-                targets = _.sortBy(targets, s => creep.pos.getRangeTo(s));
+                targets = _.sortBy(targets, s => creep.pos.getRangeTo(s)).reverse();
                 for(var i in targets){
                     if(targets[i].structureType == STRUCTURE_CONTAINER){
                         target = targets[i];
