@@ -9,13 +9,13 @@ var roleBuilder = {
         if(creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
 
-            const containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
+            var containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
                 filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
                                i.store[RESOURCE_ENERGY] > 0
             });
             if(containersWithEnergy.length > 0) {
                 creep.say('🏧 withdrawing');
-                containersWithEnergy = _.containersWithEnergy(targets, s => creep.pos.getRangeTo(s)).reverse();
+                containersWithEnergy = _.sortBy(containersWithEnergy, s => creep.pos.getRangeTo(s)).reverse();
                 // store where we want to withdraw from
                 creep.memory.withdraw = containersWithEnergy[0].id;
                 

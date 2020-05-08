@@ -1,3 +1,5 @@
+const { floor } = require("lodash");
+
 const CREEP_PER_ENERGY = 150;
 const RESOURCE_RADIUS = 10;
 
@@ -109,7 +111,11 @@ var ResourceDataHandler = {
     },
     
     shouldAddCreep: function(){
-        if(this.creeps.length*200 < this.totalStore){
+        // this is the forumla I calculated. Initialyl have 6 creeps?
+        // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
+        var maxCreeps = 5 - floor((Memory.maxEnergy-400)/300);
+        //onsole.log("max creeps: ", maxCreeps);
+        if(this.creeps.length < maxCreeps){
             return true;
         }
         return false;

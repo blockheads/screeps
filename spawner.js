@@ -52,7 +52,7 @@ var Spawner = {
         }
 
         // determining our creep price
-        var price = BASE_CREEP_PRICE + totalCreeps*100;
+        var price = BASE_CREEP_PRICE + totalCreeps*75;
 
         // ensure we don't go overboard here
         if(price > maxEnergy)
@@ -102,7 +102,7 @@ var Spawner = {
             if(ret == 0)
                 console.log('Spawning new repairer: ' + newName);
         }
-        else if(upgraders.length <= INTIAL_UPGRADERS) {
+        else if(upgraders.length < INTIAL_UPGRADERS) {
             
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'upgrader');
             if(ret == 0)
