@@ -7,63 +7,83 @@ var roleRepairer = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.memory.repairing && creep.store[RESOURCE_ENERGY] == 0) {
-            creep.memory.repairing = false;
+        const containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
+            filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
+                           i.store[RESOURCE_ENERGY] > 0
+        });
 
-            
-            const containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
-                filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
-                               i.store[RESOURCE_ENERGY] > 0
-            });
-            if(containersWithEnergy.length > 0) {
-                creep.say('🏧 withdrawing');
-                // store where we want to withdraw from
-                creep.memory.withdraw = containersWithEnergy[0].id;
-                
-            }
-            else{
-                creep.say('🔄 harvest');
-
-                creep.memory.source = resource.findOptimalSource(creep);
-                //console.log("found optimal source " + creep.memory.source);
-                
-            }
-
-            
-        }
-        if(!creep.memory.repairing && creep.store.getFreeCapacity() == 0) {
-            creep.memory.repairing = true;
+        if( !creep.memory.repairing && !creep.memory.withdraw && !creep.memory.source || (!creep.memory.repairing && creep.store.getFreeCapacity() == 0)) {
+            console.log("called in here");
             creep.say('❤️ repairing ❤️');
             creep.memory.withdraw = null;
             resource.DeselectSource(creep);
-        }
+            creep.memory.repairing = true;
 
-        if(creep.memory.repairing) {
             const targets = creep.room.find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax
             });
             
             targets.sort((a,b) => a.hits - b.hits);
-            
-            if(targets.length > 0) {
-                if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+            creep.memory.repairTarget = targets[0].id;
+            for( var i in targets){
+                console.log("targets[i].structureType ",  targets[i].structureType, "== StructureContainer && ",  "targets[i].structureType.hits ", targets[i].hits, " < 100000");
+                if(targets[i].structureType == STRUCTURE_CONTAINER && targets[i].hits < 100000){
+                    creep.memory.repairTarget = targets[i].id;
                 }
             }
-            else{
-                roleUpgrader.run(creep);
+        }
+        else if(!creep.memory.repairing && !creep.memory.withdraw && containersWithEnergy.length > 0 && !creep.memory.source) {
+            creep.say('🏧 withdrawing');
+            // store where we want to withdraw from
+            creep.memory.withdraw = containersWithEnergy[0].id;
+            
+            
+        }
+
+        else if(!creep.memory.repairing && !creep.memory.source && creep.store[RESOURCE_ENERGY] == 0) {
+            creep.memory.repairing = false;
+            creep.say('🔄 harvest');
+            creep.memory.source = resource.findOptimalSource(creep);
+            creep.memory.withdraw = null;
+
+        }
+
+        if(creep.memory.repairing) {
+            console.log("reparing...");
+            var target = Game.getObjectById(creep.memory.repairTarget);
+
+            if(creep.repair(Game.getObjectById(creep.memory.repairTarget)) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(Game.getObjectById(creep.memory.repairTarget), {visualizePathStyle: {stroke: '#ffaa00'}});
             }
+
+            if(target.structureType == STRUCTURE_ROAD && target.hits == 5000){
+                creep.memory.repairing = false;
+            }
+
+            if(target.structureType == STRUCTURE_WALL && target.hits == 10000){
+                creep.memory.repairing = false;
+            }
+            
+            console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);
+            
+          
         }
         else {
             // withdrawing
             if(creep.memory.withdraw){
+                var target = Game.getObjectById(creep.memory.withdraw);
                 // check that the store we are withdrawing from isn't 0 now
-                if(Game.getObjectById(creep.memory.withdraw).store[RESOURCE_ENERGY] == 0){
+                if(target.store[RESOURCE_ENERGY] == 0){
                     creep.memory.withdraw = null;
                 }
                 else {
-                    if(creep.withdraw(Game.getObjectById(creep.memory.withdraw), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
-                        creep.moveTo(Game.getObjectById(creep.memory.withdraw), {visualizePathStyle: {stroke: '#ffffff'}});
+                    
+                    var ret = creep.withdraw(target, RESOURCE_ENERGY);
+                    if( ret == ERR_NOT_IN_RANGE){
+                        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
+                    if(ret == 0){
+                        Memory.DebugMap[creep.memory.source].storage[creep.memory.withdraw].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
                     }
                 }
             }
@@ -76,7 +96,7 @@ var roleRepairer = {
             // uninitialized
             else{
                 // we just tell it it's 'repairing' to make it make up it's mind
-                creep.memory.repairing = true;
+                //creep.memory.repairing = true;
             }
         }
     },

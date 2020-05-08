@@ -23,7 +23,7 @@ var ResourceDataHandler = {
         
         
         // INITIALIZE OUR LISTS
-        this.storage = [];
+        this.storage = new Map();
         
         var mainStorage = [];
         var towers = [];
@@ -81,7 +81,13 @@ var ResourceDataHandler = {
         towers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
         containers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
 
-        this.storage = mainStorage.concat(towers,containers);
+        var storageList = mainStorage.concat(towers,containers);
+
+        // store in our map
+        for(var i in storageList){
+            this.storage[storageList[i].id] =  storageList[i];
+        }
+
         console.log(JSON.stringify(this.storage));
         
 

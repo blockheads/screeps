@@ -86,7 +86,8 @@ var roleHarvester = {
                     }
                     
                     // null out and move to the next available storage element
-                    if( ret == 0 ){
+                    if( ret == 0 && creep.memory.selectedStorage){
+                        //Memory.DebugMap[creep.memory.source].storage[creep.memory.selectedStorage].available = storage.store[RESOURCE_ENERGY];
                         creep.memory.selectedStorage = null;
                     }
                     
@@ -94,7 +95,7 @@ var roleHarvester = {
                 else{
                     creep.memory.storage = null; 
                     console.log("Nothing to do for ", creep.name);
-                    roleBuilder.run(creep);       
+                    //roleBuilder.run(creep);       
                 }
             }
             

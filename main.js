@@ -26,18 +26,25 @@ module.exports.loop = function () {
     // spawns our screepies
     Spawner.spawn();
     
-    var tower = Game.getObjectById('TOWER_ID');
+    var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {
-        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => structure.hits < structure.hitsMax
-        });
-        if(closestDamagedStructure) {
-            tower.repair(closestDamagedStructure);
+        // only repair if we are over half full.
+        if(tower.store[RESOURCE_ENERGY] > 500){
+            var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => structure.hits < structure.hitsMax &&
+                                       structure.structureType != STRUCTURE_WALL
+            });
+            if(closestDamagedStructure) {
+                tower.repair(closestDamagedStructure);
+                Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
+            }
         }
+       
 
         var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if(closestHostile) {
             tower.attack(closestHostile);
+            Memory.DebugMap[creep.memory.source].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
         }
     }
 

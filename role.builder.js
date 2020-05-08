@@ -39,7 +39,7 @@ var roleBuilder = {
         if(creep.memory.building) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
-                var target = null;
+                var target = targets[0];
                 // this is a little slow
                 targets = _.sortBy(targets, s => creep.pos.getRangeTo(s)).reverse();
                 for(var i in targets){
@@ -56,13 +56,19 @@ var roleBuilder = {
         else {
             // withdrawing
             if(creep.memory.withdraw){
+                var target = Game.getObjectById(creep.memory.withdraw);
                 // check that the store we are withdrawing from isn't 0 now
-                if(Game.getObjectById(creep.memory.withdraw).store[RESOURCE_ENERGY] == 0){
+                if(target.store[RESOURCE_ENERGY] == 0){
                     creep.memory.withdraw = null;
                 }
                 else {
-                    if(creep.withdraw(Game.getObjectById(creep.memory.withdraw), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
-                        creep.moveTo(Game.getObjectById(creep.memory.withdraw), {visualizePathStyle: {stroke: '#ffffff'}});
+                    
+                    var ret = creep.withdraw(target, RESOURCE_ENERGY);
+                    if( ret == ERR_NOT_IN_RANGE){
+                        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
+                    if(ret == 0){
+                        Memory.DebugMap[creep.memory.source].storage[creep.memory.withdraw].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
                     }
                 }
             }
