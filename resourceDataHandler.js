@@ -109,7 +109,7 @@ var ResourceDataHandler = {
     },
     
     shouldAddCreep: function(){
-        if(this.creeps.length*200 < this.totalStore){
+        if(this.creeps.length*150 < this.totalStore){
             return true;
         }
         return false;

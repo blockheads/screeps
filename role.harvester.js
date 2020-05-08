@@ -1,6 +1,7 @@
 var gen = require('util.gen');
 var resource = require('resource');
 var roleUpgrader = require('role.upgrader');
+const roleBuilder = require('./role.builder');
 
 var roleHarvester = {
 
@@ -29,8 +30,9 @@ var roleHarvester = {
             creep.memory.mining = false;
             // if we aren't mining get our current carry 
             var carry = creep.carry.getUsedCapacity(RESOURCE_ENERGY);
+
             //console.log("creep ", creep.name, " carry ", carry);
-            if(carry == 0){
+            if(!carry || carry == 0){
                 // mining
                 //console.log("creep ", creep.name, " carry ", carry, " mining now.");
                 creep.memory.mining = true;
@@ -90,9 +92,9 @@ var roleHarvester = {
                     
                 }
                 else{
-                    //
-                    console.log("Nothing to do for ", creep.name);
                     creep.memory.storage = null; 
+                    console.log("Nothing to do for ", creep.name);
+                    roleBuilder.run(creep);       
                 }
             }
             

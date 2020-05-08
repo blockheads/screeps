@@ -55,7 +55,7 @@ var Spawner = {
         var price = BASE_CREEP_PRICE + totalCreeps*50;
 
         // ensure we don't go overboard here
-        if(price > 800)
+        if(price > maxEnergy)
                 price = maxEnergy
         
         //console.log("price is currently: ", price);

@@ -21,12 +21,12 @@ var roleBuilder = {
             }
             else{
                 creep.say('🔄 harvest');
-
-                creep.memory.source = resource.findOptimalSource(creep);
-                //console.log("found optimal source " + creep.memory.source);
+                if(!creep.memory.source){
+                    creep.memory.source = resource.findOptimalSource(creep);
+                    //console.log("found optimal source " + creep.memory.source);
+                } 
                 
             }
-
             
         }
         if(!creep.memory.building && creep.store.getFreeCapacity() == 0) {
@@ -39,8 +39,17 @@ var roleBuilder = {
         if(creep.memory.building) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                var target = null;
+                // this is a little slow
+                targets = _.sortBy(targets, s => creep.pos.getRangeTo(s));
+                for(var i in targets){
+                    if(targets[i].structureType == STRUCTURE_CONTAINER){
+                        target = targets[i];
+                    }
+                }
+
+                if(creep.build(target) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
         }

@@ -107,6 +107,17 @@ var Resource = {
         }
         
         //find closest avaible spot for screepie
+        var maxEnergy = 0;
+        var source =  sources[0].id;
+        for(var i in sources){
+            var cap = sources[i].energy;
+            if( cap >= maxEnergy){
+                maxEnergy = cap;
+                source =  sources[i].id;
+            }
+        }
+        console.log("selected optimal source: ", source);
+        return source;
 
         // sort our sorces by distnace to our creep
         _.sortBy(sources, s => creep.pos.getRangeTo(s));
