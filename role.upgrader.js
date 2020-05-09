@@ -19,7 +19,7 @@ var roleUpgrader = {
             creep.memory.source = null;
         }
 
-        else if(!creep.memory.withdraw && containersWithEnergy.length > 0 && !creep.memory.source) {
+        else if(!creep.memory.upgrading && !creep.memory.withdraw && containersWithEnergy.length > 0 && !creep.memory.source) {
             creep.say('🏧 withdrawing');
             // store where we want to withdraw from
             creep.memory.withdraw = containersWithEnergy[0].id;
@@ -28,7 +28,7 @@ var roleUpgrader = {
             
         }
 
-        else if(!creep.memory.withdraw && !creep.memory.source && creep.store[RESOURCE_ENERGY] == 0) {
+        else if(!creep.memory.upgrading && !creep.memory.withdraw && !creep.memory.source && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
             creep.say('🔄 harvest');
             creep.memory.source = resource.findOptimalSource(creep);
