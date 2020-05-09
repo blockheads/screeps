@@ -68,7 +68,16 @@ var roleBuilder = {
                         creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
                     if(ret == 0){
-                        Memory.DebugMap[creep.memory.source].storage[creep.memory.withdraw].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                        for(var i in Memory.DebugMap){
+                            for(var j in Memory.DebugMap[i].storage){
+                                if(Memory.DebugMap[i].storage[j] == creep.memory.withdraw){
+                                    console.log(creep.name, " updated ", j, " to ", target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY])
+                                    Memory.DebugMap[i].storage[j].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                                }
+                            }
+                            
+                        }
+                        
                     }
                 }
             }

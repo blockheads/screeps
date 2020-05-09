@@ -1,4 +1,5 @@
 const roleHarvester = require('role.harvester');
+const roleLongHarvester = require('role.longHarvester');
 const roleUpgrader = require('role.upgrader');
 const resource = require('resource');
 const roleBuilder = require('role.builder');
@@ -64,6 +65,10 @@ module.exports.loop = function () {
 
         if(creep.memory.role == 'repairer') {
             roleRepairer.run(creep);
+        }
+
+        if(creep.memory.role == 'chaptermasterringostar'){
+            roleLongHarvester.run(creep);
         }
         
     }

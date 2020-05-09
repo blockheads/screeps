@@ -23,11 +23,12 @@ var roleUpgrader = {
             creep.say('🏧 withdrawing');
             // store where we want to withdraw from
             creep.memory.withdraw = containersWithEnergy[0].id;
-            
+            creep.memory.source = null;
+            creep.memory.upgrading = false;
             
         }
 
-        else if(!creep.memory.source && creep.store[RESOURCE_ENERGY] == 0) {
+        else if(!creep.memory.withdraw && !creep.memory.source && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
             creep.say('🔄 harvest');
             creep.memory.source = resource.findOptimalSource(creep);
@@ -38,6 +39,9 @@ var roleUpgrader = {
         if(creep.memory.upgrading) {
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+            if(creep.store[RESOURCE_ENERGY] == 0){
+                creep.memory.upgrading = null;
             }
 
         }
@@ -55,7 +59,16 @@ var roleUpgrader = {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
                 if(ret == 0){
-                    Memory.DebugMap[creep.memory.source].storage[creep.memory.withdraw].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                    for(var i in Memory.DebugMap){
+                        for(var j in Memory.DebugMap[i].storage){
+                            if(Memory.DebugMap[i].storage[j] == creep.memory.withdraw){
+                                console.log(creep.name, " updated ", j, " to ", target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY])
+                                Memory.DebugMap[i].storage[j].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                            }
+                        }
+                        
+                    }
+                    
                 }
             }
         }
@@ -69,7 +82,7 @@ var roleUpgrader = {
         else{
 
             // we just tell it it's 'repairing' to make it make up it's mind
-            creep.memory.upgrading = true;
+            creep.memory.upgrading = null;
         }
     },
     

@@ -108,6 +108,9 @@ var Resource = {
         
         //find closest avaible spot for screepie
         var maxEnergy = 0;
+        if(sources.length == 0){
+            return;
+        }
         var source =  sources[0].id;
         for(var i in sources){
             var cap = sources[i].energy;

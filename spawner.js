@@ -7,6 +7,7 @@ const ResourceDataHandler = require('resourceDataHandler');
 const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 1;
 const INTIAL_BUILDERS = 1;
+const INITIAL_LONG_RANGE_HARVESTER = 1;
 
 const UPGRADERS_MAX = 4;
 const BUILDERS_MAX = 2;
@@ -20,6 +21,7 @@ var Spawner = {
     spawn: function(){
 
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+        var chaptermasterringostar = _.filter(Game.creeps, (creep) => creep.memory.role == 'chaptermasterringostar');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
@@ -94,6 +96,10 @@ var Spawner = {
 
         //     if(ret == 0)
         //         console.log('Spawning new harvester: ' + newName);
+        // }
+        // if(chaptermasterringostar.length < INITIAL_LONG_RANGE_HARVESTER){
+        //     console.log("spawing in chaptermasterringostar the fourth.");
+        //     return Game.spawns['Spawn1'].createCustomCreep(price,'chaptermasterringostar', '5bbcaa7e9099fc012e63179b');
         // }
         if(repairers.length < INITIAL_REPAIRERS) {
             

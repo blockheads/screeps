@@ -99,6 +99,10 @@ module.exports = function() {
                 return this.createCreep(body, name, { role: roleName});
                 
             }
+            
+            if(Memory.DebugMap[opt] == null){
+                return  this.createCreep(body, name, { role: roleName, source: '5bbcaa7e9099fc012e63179b'});
+            }
                 
             var ret = this.createCreep(body, name, { role: roleName, source: Memory.DebugMap[opt].id});
 

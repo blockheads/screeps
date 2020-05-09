@@ -12,12 +12,13 @@ var roleRepairer = {
                            i.store[RESOURCE_ENERGY] > 0
         });
 
-        if( !creep.memory.repairing && !creep.memory.withdraw && !creep.memory.source || (!creep.memory.repairing && creep.store.getFreeCapacity() == 0)) {
+        if( !creep.memory.repairing && creep.store.getFreeCapacity() == 0) {
             console.log("called in here");
             creep.say('❤️ repairing ❤️');
             creep.memory.withdraw = null;
             resource.DeselectSource(creep);
             creep.memory.repairing = true;
+            creep.memory.source = null;
 
             const targets = creep.room.find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax
@@ -40,7 +41,7 @@ var roleRepairer = {
             
         }
 
-        else if(!creep.memory.repairing && !creep.memory.source && creep.store[RESOURCE_ENERGY] == 0) {
+        else if(!creep.memory.repairing && !creep.memory.source && !creep.memory.withdraw) {
             creep.memory.repairing = false;
             creep.say('🔄 harvest');
             creep.memory.source = resource.findOptimalSource(creep);
@@ -49,6 +50,9 @@ var roleRepairer = {
         }
 
         if(creep.memory.repairing) {
+            if(creep.store[RESOURCE_ENERGY] == 0){
+                creep.memory.repairing = false;
+            }
             console.log("reparing...");
             var target = Game.getObjectById(creep.memory.repairTarget);
 
@@ -83,7 +87,16 @@ var roleRepairer = {
                         creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
                     if(ret == 0){
-                        Memory.DebugMap[creep.memory.source].storage[creep.memory.withdraw].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                        for(var i in Memory.DebugMap){
+                            for(var j in Memory.DebugMap[i].storage){
+                                if(Memory.DebugMap[i].storage[j] == creep.memory.withdraw){
+                                    console.log(creep.name, " updated ", j, " to ", target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY])
+                                    Memory.DebugMap[i].storage[j].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                                }
+                            }
+                            
+                        }
+                        
                     }
                 }
             }
