@@ -5,6 +5,7 @@ const resource = require('resource');
 const roleBuilder = require('role.builder');
 const roleRepairer = require('role.repairer');
 const Spawner = require('spawner');
+const roleScout = require('./role.scout');
 
 const HARVESTERS_MAX = 6;
 const UPGRADERS_MAX = 6;
@@ -67,8 +68,13 @@ module.exports.loop = function () {
             roleRepairer.run(creep);
         }
 
-        if(creep.memory.role == 'chaptermasterringostar'){
+        if(creep.memory.role == 'longharvester'){
             roleLongHarvester.run(creep);
+        }
+
+        if(creep.memory.role == 'scout')
+        {
+            roleScout.run(creep);
         }
         
     }

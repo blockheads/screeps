@@ -135,7 +135,6 @@ var ResourceDataHandler = {
     addCreep: function(creepName){   
         this.creeps.push(creepName);
     },
-
 }
 
 module.exports = ResourceDataHandler;

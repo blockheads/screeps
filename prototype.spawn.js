@@ -3,6 +3,8 @@ const roleUpgrader = require("./role.upgrader");
 const roleRepairer = require("./role.repairer");
 const roleHarvester = require("./role.harvester");
 const ResourceDataHandler = require('resourceDataHandler');
+const roleLongHarvester = require("./role.longHarvester");
+const roleScout = require("./role.scout");
 
 module.exports = function() {
     // create a new function for StructureSpawn
@@ -92,6 +94,26 @@ module.exports = function() {
 
                 name = roleRepairer.gen();
             }
+
+            else if(roleName == 'longharvester'){
+                if(remainingEnergy >= 50){
+                    body.push(MOVE);
+                    remainingEnergy -= 50;
+                }
+                if(remainingEnergy >= 100){
+                    body.push(WORK);
+                    remainingEnergy -= 100;
+                }
+                if(remainingEnergy >= 50){
+                    body.push(CARRY);
+                    remainingEnergy -= 50;
+                }
+
+                name = roleLongHarvester.gen();
+            }
+            else if(roleName == 'scout'){
+                name = roleScout.gen();
+            }
             //console.log("body ", body, " name ", name, " role ", roleName);
 
             // create creep with the created body and the given role
@@ -100,7 +122,7 @@ module.exports = function() {
                 
             }
             
-            if(Memory.DebugMap[opt] == null){
+            if(roleName == "longharvester"){
                 return  this.createCreep(body, name, { role: roleName, source: '5bbcaa7e9099fc012e63179b'});
             }
                 

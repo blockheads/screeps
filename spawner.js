@@ -4,13 +4,15 @@ require('prototype.spawn')();
 require('resourceData');  
 const ResourceDataHandler = require('resourceDataHandler');
 
+const SCOUTS = 1;
+
 const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 1;
 const INTIAL_BUILDERS = 1;
 const INITIAL_LONG_RANGE_HARVESTER = 1;
 
 const UPGRADERS_MAX = 4;
-const BUILDERS_MAX = 2;
+const BUILDERS_MAX = 1;
 const REPAIRERS_MAX = 2;
 
 const BASE_CREEP_PRICE = 200;
@@ -21,10 +23,11 @@ var Spawner = {
     spawn: function(){
 
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-        var chaptermasterringostar = _.filter(Game.creeps, (creep) => creep.memory.role == 'chaptermasterringostar');
+        var longharvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'longharvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
+        var scouts = _.filter(Game.creeps, (creep) => creep.memory.role == 'scout');
 
         var totalCreeps = harvesters.length + upgraders.length + builders.length + repairers.length;
         var maxEnergy = Game.spawns['Spawn1'].room.energyCapacityAvailable;
@@ -62,6 +65,20 @@ var Spawner = {
         
         //console.log("price is currently: ", price);
 
+
+        //spawning in a scout if we have a uninitialized room.
+        if(scouts.length < SCOUTS){
+            for(var i in Memory.RoomData){
+                if(!Memory.RoomData[i].initialized){
+                    // store the uninitialized room as our goal room
+                    var ret = Game.spawns['Spawn1'].createCustomCreep(200,'scout');
+                    if(ret == 0)
+                        console.log('Spawning new scout: ' + newName);
+                    }
+            }
+        }
+        
+
         // not going to try and spawn a creep if we don't have the energy
         if(currentEnergy < price){
             return;
@@ -94,13 +111,12 @@ var Spawner = {
         //     var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
             
 
-        //     if(ret == 0)
-        //         console.log('Spawning new harvester: ' + newName);
+
+        // if(longharvesters.length < INITIAL_LONG_RANGE_HARVESTER){
+            
+        //     return Game.spawns['Spawn1'].createCustomCreep(price,'longharvester');
         // }
-        // if(chaptermasterringostar.length < INITIAL_LONG_RANGE_HARVESTER){
-        //     console.log("spawing in chaptermasterringostar the fourth.");
-        //     return Game.spawns['Spawn1'].createCustomCreep(price,'chaptermasterringostar', '5bbcaa7e9099fc012e63179b');
-        // }
+        
         if(repairers.length < INITIAL_REPAIRERS) {
             
 
