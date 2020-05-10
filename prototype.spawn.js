@@ -117,6 +117,9 @@ module.exports = function() {
             else if(roleName == 'scout'){
                 name = roleScout.gen();
             }
+            else if(roleName == 'wallrepairer'){
+                name = roleWallRepairer.gen();
+            }
             //console.log("body ", body, " name ", name, " role ", roleName);
 
             // create creep with the created body and the given role

@@ -54,7 +54,7 @@ module.exports.loop = function () {
         var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if(closestHostile) {
             tower.attack(closestHostile);
-            Memory.DebugMap[creep.memory.source].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+            Memory.DebugMap[creep.memory.source].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
         }
     }
 

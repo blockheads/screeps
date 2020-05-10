@@ -75,6 +75,8 @@ if(!Memory.RoomData){
         console.log("the room we want: ", JSON.stringify(Game.rooms));
         // if we have data on the room
         if(Game.rooms[ROOMS[j]]){
+            var controller = Game.rooms[ROOMS[j]].controller;
+            Memory.RoomData[ROOMS[j]].controlled = controller.my
             Memory.RoomData[ROOMS[j]].initialized = true;
             var roomSources =  Game.rooms[ROOMS[j]].find(FIND_SOURCES);
             for(var i in roomSources){
@@ -83,6 +85,7 @@ if(!Memory.RoomData){
         }
         else{
             Memory.RoomData[ROOMS[j]].initialized = false;
+            Memory.RoomData[ROOMS[j]].controlled = false;
         }
         
     }
