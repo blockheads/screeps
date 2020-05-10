@@ -10,6 +10,7 @@ const INTIAL_UPGRADERS = 2;
 const INITIAL_REPAIRERS = 1;
 const INTIAL_BUILDERS = 1;
 const INITIAL_LONG_RANGE_HARVESTER = 1;
+const WALL_REPAIRER = 1;
 
 const UPGRADERS_MAX = 4;
 const BUILDERS_MAX = 1;
@@ -22,11 +23,14 @@ var Spawner = {
 
     spawn: function(){
 
+        console.log("construction sites: ", Game.constructionSites);
+
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         var longharvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'longharvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
+        var wallrepairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallrepairer');
         var scouts = _.filter(Game.creeps, (creep) => creep.memory.role == 'scout');
 
         var totalCreeps = harvesters.length + upgraders.length + builders.length + repairers.length;
@@ -116,8 +120,12 @@ var Spawner = {
             
         //     return Game.spawns['Spawn1'].createCustomCreep(price,'longharvester');
         // }
-        
-        if(repairers.length < INITIAL_REPAIRERS) {
+        if(wallrepairers.length < WALL_REPAIRER){
+            var ret = Game.spawns['Spawn1'].createCustomCreep(price,'wallrepairer');
+            if(ret == 0)
+                console.log('Spawning new repairer: ' + newName);
+        }
+        else if(repairers.length < INITIAL_REPAIRERS) {
             
 
             var ret = Game.spawns['Spawn1'].createCustomCreep(price,'repairer');

@@ -3,9 +3,11 @@ const roleLongHarvester = require('role.longHarvester');
 const roleUpgrader = require('role.upgrader');
 const resource = require('resource');
 const roleBuilder = require('role.builder');
-const roleRepairer = require('role.repairer');
+const roleRepairer = require("role.repairer");
 const Spawner = require('spawner');
 const roleScout = require('./role.scout');
+const roleWallRepairer = require('./role.repairer.wall');
+
 
 const HARVESTERS_MAX = 6;
 const UPGRADERS_MAX = 6;
@@ -34,7 +36,9 @@ module.exports.loop = function () {
         if(tower.store[RESOURCE_ENERGY] > 500){
             var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.hits < structure.hitsMax &&
-                                       structure.structureType != STRUCTURE_WALL
+                                       structure.structureType != STRUCTURE_WALL &&
+                                       structure.structureType != STRUCTURE_RAMPART &&
+                                       structure.structureType != STRUCTURE_ROAD
             });
             if(closestDamagedStructure) {
                 tower.repair(closestDamagedStructure);
@@ -50,8 +54,10 @@ module.exports.loop = function () {
         }
     }
 
+    
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
+
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         }
@@ -75,6 +81,10 @@ module.exports.loop = function () {
         if(creep.memory.role == 'scout')
         {
             roleScout.run(creep);
+        }
+        
+        if(creep.memory.role == 'wallrepairer'){
+            roleWallRepairer.run(creep);
         }
         
     }

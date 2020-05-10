@@ -1,3 +1,5 @@
+Priority 1: Fix repairering code for both turret/ repairers.
+
 Need to make use of available, choosing a storage from the list is lagging the shit out of the game lmao.
 update everything else to use zones... going to be tough
 
@@ -14,3 +16,13 @@ with automated construction stuff.
 Issue is small harvesters get built early, than bigger boys, than we just have small harvesters. Need to scale amount w/ their price.
 
 FIX ALL THIS LAGGY CODE YOU JUST ADDED >:(
+
+
+Room.prototype.getRepairTargets = function () {
+    if (! this._repairTargets) {
+        this._repairTargets = this.find(FIND_MY_STRUCTURES, {
+            filter: struct => struct.hits < struct.hitsMax,
+        })
+    }
+    return this._repairTargets;
+};

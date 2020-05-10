@@ -118,15 +118,15 @@ module.exports = function() {
 
             // create creep with the created body and the given role
             if(opt == null){
-                return this.createCreep(body, name, { role: roleName});
+                return this.createCreep(body, name, { role: roleName, home: Game.spawns['Spawn1'].room.name});
                 
             }
             
             if(roleName == "longharvester"){
-                return  this.createCreep(body, name, { role: roleName, source: '5bbcaa7e9099fc012e63179b'});
+                return  this.createCreep(body, name, { role: roleName, source: '5bbcaa7e9099fc012e63179b', home: Game.spawns['Spawn1'].room.name});
             }
                 
-            var ret = this.createCreep(body, name, { role: roleName, source: Memory.DebugMap[opt].id});
+            var ret = this.createCreep(body, name, { role: roleName, source: Memory.DebugMap[opt].id, home: Game.spawns['Spawn1'].room.name});
 
             if(ret == name){
                 ResourceDataHandler.addCreep.call(Memory.DebugMap[opt],name);

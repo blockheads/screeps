@@ -12,7 +12,7 @@ var roleRepairer = {
                            i.store[RESOURCE_ENERGY] > 0
         });
 
-        if( !creep.memory.repairing && creep.store.getFreeCapacity() == 0) {
+        if( !creep.memory.repairing && creep.store[RESOURCE_ENERGY] != 0) {
             console.log("called in here");
             creep.say('❤️ repairing ❤️');
             creep.memory.withdraw = null;
