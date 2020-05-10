@@ -1,6 +1,5 @@
 var gen = require('util.gen');
 var resource = require('resource');
-var roleUpgrader = require('role.upgrader');
 
 require('prototype.room')();
 

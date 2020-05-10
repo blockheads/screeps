@@ -1,7 +1,6 @@
 var gen = require('util.gen');
 var resource = require('resource');
-var roleUpgrader = require('role.upgrader');
-const roleBuilder = require('./role.builder');
+const roleBuilder = require('./role.worker.builder');
 
 var roleHarvester = {
 

@@ -1,13 +1,17 @@
 const roleHarvester = require('role.harvester');
 const roleLongHarvester = require('role.longHarvester');
-const roleUpgrader = require('role.upgrader');
+
 const resource = require('resource');
-const roleBuilder = require('role.builder');
-const roleRepairer = require("role.repairer");
+
 const Spawner = require('spawner');
 const roleScout = require('./role.scout');
-const roleWallRepairer = require('./role.repairer.wall');
-
+// workers
+// base worker class
+require('role.worker');
+const roleBuilder = require('role.worker.builder');
+const roleUpgrader = require('role.worker.upgrader');
+const roleRepairer = require("role.worker.repairer");
+const roleWallRepairer = require('./role.worker.repairer.wall');
 
 const HARVESTERS_MAX = 6;
 const UPGRADERS_MAX = 6;

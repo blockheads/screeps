@@ -4,8 +4,6 @@
 
 var gen = require('util.gen');
 var resource = require('resource');
-var roleUpgrader = require('role.upgrader');
-const WorkerCreep = require('WorkerCreep');
 require('prototype.room')();
 
 //import WorkerCreep from './WorkerCreep';

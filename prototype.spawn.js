@@ -1,10 +1,13 @@
-const roleBuilder = require("./role.builder");
-const roleUpgrader = require("./role.upgrader");
-const roleRepairer = require("./role.repairer");
 const roleHarvester = require("./role.harvester");
 const ResourceDataHandler = require('resourceDataHandler');
 const roleLongHarvester = require("./role.longHarvester");
 const roleScout = require("./role.scout");
+
+// workers
+const roleBuilder = require('role.worker.builder');
+const roleUpgrader = require('role.worker.upgrader');
+const roleRepairer = require("role.worker.repairer");
+const roleWallRepairer = require('./role.worker.repairer.wall');
 
 module.exports = function() {
     // create a new function for StructureSpawn
