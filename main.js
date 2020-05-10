@@ -1,9 +1,10 @@
+const resource = require('resource');
+const Spawner = require('spawner');
+
+// base creep class
+require('role.base');
 const roleHarvester = require('role.harvester');
 const roleLongHarvester = require('role.longHarvester');
-
-const resource = require('resource');
-
-const Spawner = require('spawner');
 const roleScout = require('./role.scout');
 // workers
 // base worker class

@@ -1,5 +1,4 @@
 var gen = require('util.gen');
-var resource = require('resource');
 require('prototype.room')();
 
 var roleBuilder = {
