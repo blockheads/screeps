@@ -86,6 +86,6 @@ module.exports.loop = function () {
         if(creep.memory.role == 'wallrepairer'){
             roleWallRepairer.run(creep);
         }
-        
+
     }
 }

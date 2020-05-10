@@ -17,12 +17,6 @@ Issue is small harvesters get built early, than bigger boys, than we just have s
 
 FIX ALL THIS LAGGY CODE YOU JUST ADDED >:(
 
-
-Room.prototype.getRepairTargets = function () {
-    if (! this._repairTargets) {
-        this._repairTargets = this.find(FIND_MY_STRUCTURES, {
-            filter: struct => struct.hits < struct.hitsMax,
-        })
-    }
-    return this._repairTargets;
-};
+For repairers:
+    store a previous target
+    check if the new target is >= 1000 less than current target, if so got to it, else heal.
