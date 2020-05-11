@@ -113,6 +113,8 @@ var Spawner = {
             
         //     //getting our source
         //     var ret = Game.spawns['Spawn1'].createCustomCreep(price,'harvester');
+
+        // FOR ROLE IN ROLE LIST
             
 
 

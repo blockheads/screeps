@@ -9,8 +9,6 @@ const WorkerCreep = require('role.worker');
 
 //import WorkerCreep from './WorkerCreep';
 
-
-
 var roleWallRepairer = {
 
     // perform logic required for our run function

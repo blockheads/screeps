@@ -1,8 +1,6 @@
 const resource = require('resource');
 const Spawner = require('spawner');
 
-// base creep class
-require('role.base');
 const roleHarvester = require('role.harvester');
 const roleLongHarvester = require('role.longHarvester');
 const roleScout = require('./role.scout');
@@ -11,11 +9,13 @@ const roleBuilder = require('role.worker.builder');
 const roleUpgrader = require('role.worker.upgrader');
 const roleRepairer = require("role.worker.repairer");
 const roleWallRepairer = require('./role.worker.repairer.wall');
+const BaseCreep = require('./role.base');
+const { HARVESTER, UPGRADER, BUILDER, REPAIRER, LONG_HARVESTER, SCOUT, WALL_REPAIRER, ROLE_MAP } = require('./role.data');
+const Manager = require('manager');
 
-const HARVESTERS_MAX = 6;
-const UPGRADERS_MAX = 6;
-const BUILDERS_MAX = 4;
-const REPAIRERS_MAX = 1;
+// this map defines a role, each of these should be defined under their
+// corresponding role. ie. role.harvester.js...
+
 
 module.exports.loop = function () {
     
@@ -59,36 +59,10 @@ module.exports.loop = function () {
 
     
     for(var name in Game.creeps) {
+
         var creep = Game.creeps[name];
-
-        if(creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
         
-        if(creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
+        Manager.getRole(creep.memory.role).run(creep);
         
-        if(creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
-        }
-
-        if(creep.memory.role == 'repairer') {
-            roleRepairer.run(creep);
-        }
-
-        if(creep.memory.role == 'longharvester'){
-            roleLongHarvester.run(creep);
-        }
-
-        if(creep.memory.role == 'scout')
-        {
-            roleScout.run(creep);
-        }
-        
-        if(creep.memory.role == 'wallrepairer'){
-            roleWallRepairer.run(creep);
-        }
-
     }
 }
