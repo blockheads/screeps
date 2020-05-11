@@ -23,7 +23,7 @@ module.exports = function() {
      */
     Room.prototype.getWallRepairTargets = function () {
         if (! this._repairTargetsWalls) {
-            this._repairTargetsWalls = this.find(FIND_MY_STRUCTURES, {
+            this._repairTargetsWalls = this.find(FIND_STRUCTURES, {
                 filter: struct => struct.hits < struct.hitsMax &&
                 (struct.structureType == STRUCTURE_WALL ||
                 struct.structureType == STRUCTURE_RAMPART)

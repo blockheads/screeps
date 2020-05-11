@@ -27,9 +27,15 @@ var roleWallRepairer = {
         console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);
     },
     
+    init: function(){
+        console.log("initialized.");
+    },
+
     /** @param {Creep} creep **/
     run: function(creep) {
-        WorkerCreep.run(creep, this.performLogic);
+        // WorkerCreep run method
+        //WorkerCreep.run(creep, this.performLogic);
+        WorkerCreep.run(creep, this.init, this.performLogic);
     },
     /**
      * generates a buildeer name

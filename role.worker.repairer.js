@@ -48,7 +48,7 @@ var roleRepairer = {
     run: function(creep) {
         // WorkerCreep run method
         //WorkerCreep.run(creep, this.performLogic);
-        WorkerCreep.actualRun(creep, this.init, this.performLogic);
+        WorkerCreep.run(creep, this.init, this.performLogic);
     },
     /**
      * generates a buildeer name
