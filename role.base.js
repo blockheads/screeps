@@ -64,6 +64,20 @@ class BaseCreep{
         }
     }
 
+    getContainerWithdraw(){
+        const containersWithEnergy = this.room.find(FIND_STRUCTURES, {
+            filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
+                           i.store[RESOURCE_ENERGY] > 0
+        });
+
+        return containersWithEnergy;
+
+    }
+
+    getHarvestSource(){
+        return resource.findOptimalSource(this);
+    }
+
 }
 
 OopUtil.extendClass(Creep, BaseCreep);

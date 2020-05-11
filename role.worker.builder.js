@@ -1,5 +1,6 @@
 var gen = require('util.gen');
 require('prototype.room')();
+const WorkerCreep = require('role.worker');
 
 var roleBuilder = {
 
@@ -23,8 +24,7 @@ var roleBuilder = {
     
     /** @param {Creep} creep **/
     run: function(creep) {
-
-        creep.run(this.performLogic);
+        WorkerCreep.run(creep, this.performLogic);
     },
     /**
      * generates a buildeer name

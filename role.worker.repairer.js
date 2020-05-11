@@ -1,6 +1,6 @@
 var gen = require('util.gen');
 var resource = require('resource');
-
+const WorkerCreep = require('role.worker');
 require('prototype.room')();
 
 //import WorkerCreep from './WorkerCreep';
@@ -40,10 +40,15 @@ var roleRepairer = {
 
     },
 
+    init: function(){
+        console.log("initialized.");
+    },
+
     /** @param {Creep} creep **/
     run: function(creep) {
         // WorkerCreep run method
-        creep.run(this.performLogic);
+        //WorkerCreep.run(creep, this.performLogic);
+        WorkerCreep.actualRun(creep, this.init, this.performLogic);
     },
     /**
      * generates a buildeer name

@@ -7,8 +7,6 @@ const roleHarvester = require('role.harvester');
 const roleLongHarvester = require('role.longHarvester');
 const roleScout = require('./role.scout');
 // workers
-// base worker class
-require('role.worker');
 const roleBuilder = require('role.worker.builder');
 const roleUpgrader = require('role.worker.upgrader');
 const roleRepairer = require("role.worker.repairer");

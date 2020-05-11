@@ -1,6 +1,7 @@
 var gen = require('util.gen');
 var resource = require('resource');
 require('prototype.room')();
+const WorkerCreep = require('role.worker');
 
 var roleUpgrader = {
 
@@ -15,7 +16,7 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        creep.run(this.performLogic);   
+        WorkerCreep.run(creep, this.performLogic);  
     },
     
     /**
