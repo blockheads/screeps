@@ -10,7 +10,6 @@ const roleUpgrader = require('role.worker.upgrader');
 const roleRepairer = require("role.worker.repairer");
 const roleWallRepairer = require('./role.worker.repairer.wall');
 const BaseCreep = require('./role.base');
-const { HARVESTER, UPGRADER, BUILDER, REPAIRER, LONG_HARVESTER, SCOUT, WALL_REPAIRER, ROLE_MAP } = require('./role.data');
 const Manager = require('manager');
 
 // this map defines a role, each of these should be defined under their
