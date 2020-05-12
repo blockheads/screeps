@@ -4,6 +4,7 @@ var States = {
     WORK: 1,
     WITHDRAW: 2,
     HARVEST:  3,
+    STORE: 4,
 
     /**
      * Runs stateful logic for a creep on initilization
@@ -12,7 +13,7 @@ var States = {
      * @param {int} transitionState next state to move to from initilization
      */
     runInit: function(creep, init, transitionState){
-
+        // console.log("creep spawning: ", creep.spawning);
         // state transition
         if(!creep.spawning){
             creep.memory.state = transitionState;
@@ -118,13 +119,21 @@ var States = {
 
     },
 
+    // this function NEEDS to be optimized
     runStore: function(creep, transitionState){
-        
+
+        if(creep.store[RESOURCE_ENERGY] == 0){
+            creep.memory.state = transitionState;
+            creep.memory.storage = null;
+            return;
+        }
+
         //hauling
         if(!creep.memory.storage){
             // assigning this creep storage
             
             creep.memory.storage = [];
+            var carry = creep.store[RESOURCE_ENERGY];
             
             for(var i in Memory.DebugMap[creep.memory.source].storage){
                 var available = Memory.DebugMap[creep.memory.source].storage[i].available;

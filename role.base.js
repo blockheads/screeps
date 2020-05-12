@@ -41,7 +41,7 @@ class BaseCreep{
         var target = Game.getObjectById(this.memory.withdraw);
         // check that the store we are withdrawing from isn't 0 now
         if(!target || target.store[RESOURCE_ENERGY] == 0){
-            this.memory.withdraw = null;
+            this.memory.withdrawing = false;
         }
         else {
             

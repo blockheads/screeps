@@ -97,8 +97,8 @@ class PriorityQueue{
     }
 
     empty(){
-        console.log("values length: ", this.values.length);
-        console.log("equal to 0? ", this.values.length == 0);
+        //console.log("values length: ", this.values.length);
+        //console.log("equal to 0? ", this.values.length == 0);
         return this.values.length == 0;
     }
 

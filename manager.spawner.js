@@ -38,15 +38,15 @@ class SpawnManager{
                 price = manager.maxEnergy
         
         // // and we don't try to spawn anything if we cannot.
-        // if(manager.currentEnergy < price)
-        //     return;
+        if(manager.currentEnergy < price)
+            return;
 
-        // // get available spawns
-        // // have to add this later
+        // get available spawns
+        // have to add this later
 
-        // // can't be spawning
-        // if(Game.spawns['Spawn1'].spawning)
-        //     return;
+        // can't be spawning
+        if(Game.spawns['Spawn1'].spawning)
+            return;
 
         // spawn creep
         var data = this.getNext();
@@ -75,7 +75,7 @@ class SpawnManager{
      * Get's the next creep on the priority queue
      */
     getNext(){
-        console.log("getNext empty ", this._spawnQueue.empty());
+        //console.log("getNext empty ", this._spawnQueue.empty());
         if(this._spawnQueue.empty())
             return false;
         return this._spawnQueue.pop();
