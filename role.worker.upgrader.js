@@ -2,8 +2,12 @@ var gen = require('util.gen');
 var resource = require('resource');
 require('prototype.room')();
 const WorkerCreep = require('role.worker');
+const FactoryNode = require('./role.factoryNode');
 
 var roleUpgrader = {
+    build: function(creep){
+        return new FactoryNode([WORK,CARRY,MOVE],[WORK,CARRY,MOVE]);
+    },
 
     performLogic: function(){
         if(this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {

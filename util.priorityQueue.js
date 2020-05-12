@@ -96,11 +96,15 @@ class PriorityQueue{
         return poppedNode;
     }
 
-    print(){
-        console.log("Queue: ", this.values);
-        for(var i in this.values){
-            console.log("i: ", i, "(", this.values[i].value, ", ", this.values[i].priority ,", ",  this.values[i].amount, " )");
-        }
+    empty(){
+        console.log("values length: ", this.values.length);
+        console.log("equal to 0? ", this.values.length == 0);
+        return this.values.length == 0;
+    }
+
+    getList(){
+        return this.values;
+        
     }
 }
 

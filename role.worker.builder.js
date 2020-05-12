@@ -1,8 +1,12 @@
 var gen = require('util.gen');
 require('prototype.room')();
 const WorkerCreep = require('role.worker');
+const FactoryNode = require('./role.factoryNode');
 
 var roleBuilder = {
+    build: function(creep){
+        return new FactoryNode([WORK,CARRY,MOVE],[WORK,CARRY,MOVE]);
+    },
 
     performLogic: function(){
         var targets = this.room.find(FIND_CONSTRUCTION_SITES);

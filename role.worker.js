@@ -27,7 +27,7 @@ var WorkerCreep = {
                 States.runWithdraw(creep, States.WORK, States.HARVEST);
                 break;
             case States.HARVEST:
-                States.runHarvest(creep, States.WORK);
+                States.runHarvest(creep, States.WORK, creep.getHarvestSource());
                 break;
             case States.WORK:
                 States.runWork(creep, performLogic, States.WITHDRAW);

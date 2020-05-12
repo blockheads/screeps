@@ -8,6 +8,7 @@ const PriorityQueue = require("./util.priorityQueue");
 const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_WALL_REPAIRER, ROLE_BUILDER } = require("./util.role");
 const ResourceDataHandler = require("./resourceDataHandler");
 const Node = require("./util.node");
+const RoleFactory = require("./role.factory");
 
 const BASE_CREEP_PRICE = 200;
 
@@ -22,35 +23,62 @@ class SpawnManager{
         for(var i in roles){
             this.update(i);
         }
+
     }
 
     /**
      * Attempts to spawn a creep at the top of the spawn queue
      */
     spawn(manager){
-        var price = BASE_CREEP_PRICE + Game.creeps.length*75;
+        var creeps = _.filter(Game.creeps, (creep) => creep.memory.home == this._room);
+        var price = BASE_CREEP_PRICE + creeps.length*75;
 
         // ensure we don't go overboard here
         if(price > manager.maxEnergy)
                 price = manager.maxEnergy
         
-        // and we don't try to spawn anything if we cannot.
-        if(manager.currentEnergy < price)
-            return;
+        // // and we don't try to spawn anything if we cannot.
+        // if(manager.currentEnergy < price)
+        //     return;
 
-        //var creepData = this.getNext();
-        //var creepBuild = manager.getRole(creepData.value).getBuild(price);
+        // // get available spawns
+        // // have to add this later
+
+        // // can't be spawning
+        // if(Game.spawns['Spawn1'].spawning)
+        //     return;
+
+        // spawn creep
+        var data = this.getNext();
+        console.log("data: ", data);  
+        var creepData = data.value;
+        console.log("creep data: ", creepData); 
+        if(!creepData)
+            return;
+        var role = manager.getRole(creepData.role);
+        var body = RoleFactory.generateBuild(price, role.build());
+        //name generation
+        var name = role.gen(); 
+        console.log("I would be spawing: ", JSON.stringify(creepData), ", ", JSON.stringify(body), ", ", name);
+
+        //Game.spawns['Spawn1'].createCreep(body, name, creepData);
     }
 
     printQueue(){
-        return this._spawnQueue.print();
+        var queue =  this._spawnQueue.getList();
+        for(var i in queue){
+            console.log("i: ", i, "(",  JSON.stringify(queue[i].value), ", ", queue[i].priority ,", ",  queue[i].amount, " )");
+        }
     }
 
     /**
      * Get's the next creep on the priority queue
      */
     getNext(){
-        return this._spawnQueue.pop()[0];
+        console.log("getNext empty ", this._spawnQueue.empty());
+        if(this._spawnQueue.empty())
+            return false;
+        return this._spawnQueue.pop();
     }
 
     /**
@@ -58,8 +86,16 @@ class SpawnManager{
      * @param {Creep} creep The creep to push
      * @param {int} priority Priority value of creep in queue
      */
-    push(data, priority, amount){
-        this._spawnQueue.push(new Node(data, priority, amount));
+    push(role, priority, amount, memory){
+        // let's initialize our memory for the curret creep
+        // then the individual update functions can add to this
+        if(!memory){
+            memory = {};
+        }
+        memory.home = this._room;
+        memory.role = role;
+
+        this._spawnQueue.push(new Node(memory, priority, amount));
     }
 
     /**
@@ -91,6 +127,7 @@ class SpawnManager{
     // respawns a creep that died
     respawn(memory){
         console.log("creep died should re-add to spawnQueue");
+        this.update(memory.role);
     }
 
 
@@ -107,7 +144,7 @@ class SpawnManager{
             var amount = maxHarvesters - currentHarvesters;
 
             if(amount > 0){
-                this.push(ROLE_HARVESTER,10,amount);
+                this.push(ROLE_HARVESTER,10,amount, {source: i});
             }
             
         }

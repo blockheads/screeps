@@ -1,11 +1,44 @@
 var gen = require('util.gen');
 var resource = require('resource');
 const roleBuilder = require('./role.worker.builder');
+const FactoryNode = require('./role.factoryNode');
+
+var Harvester = {
+
+    run(creep, init){
+        // WORKER CREEP STATES
+        // =-----------------=
+        // INIT -> WITHDRAW
+        // WITHDRAW -> HARVEST | WORKING .
+        // WORKING -> WITHDRAW ^
+        if(!creep.memory.state){
+            creep.memory.state = States.INIT;
+        }
+
+        switch(creep.memory.state){
+            case States.INIT:
+                States.runInit(creep, init, States.WORK);
+                break;
+            case States.HARVEST:
+                States.runHarvest(creep, performLogic, States.STORE, creep.memory.source);
+                break;
+            case States.STORE:
+                States.runStore(creep, performLogic, States.HARVEST);
+                break;
+        }
+        
+    }
+}
 
 var roleHarvester = {
     // this defines the harvesters build
+    init: function(creep){
+        // uhh probably shouldn't be this dumb of a way to do this... i'm really tired atm
+        Memory.RoomData[creep.memory.home].resourceData[creep.memory.source].creeps.push(creep.name);
+    },
+
     build: function(creep){
-        
+        return new FactoryNode([WORK,CARRY,MOVE],[WORK,WORK,CARRY]);
     },
 
     /** @param {Creep} creep **/

@@ -93,7 +93,7 @@ var States = {
      * @param {Creep} creep The creep to perform stateful logic
      * @param {func} transitionState int to the state to transition after done harvesting.
      */
-    runHarvest: function(creep, transitionState){
+    runHarvest: function(creep, transitionState, source){
 
         // if we are harvesting
         if(creep.memory.harvesting){
@@ -103,14 +103,82 @@ var States = {
                 creep.memory.harvesting = false;
                 creep.memory.state = transitionState; 
             }
+
+            if(creep.harvest(Game.getObjectById( creep.memory.source)) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(Game.getObjectById( creep.memory.source), {visualizePathStyle: {stroke: '#ffaa00'}});
+            }
+
             return;
         }
 
         // otherwise get harvest point
-        creep.memory.source = creep.getHarvestSource();
+        creep.memory.source = source;
         creep.memory.harvesting = true;
         return; 
 
+    },
+
+    runStore: function(creep, transitionState){
+        
+        //hauling
+        if(!creep.memory.storage){
+            // assigning this creep storage
+            
+            creep.memory.storage = [];
+            
+            for(var i in Memory.DebugMap[creep.memory.source].storage){
+                var available = Memory.DebugMap[creep.memory.source].storage[i].available;
+                if(available != 0){
+                    // subtract however much we are removing from available
+                    if(carry > available){
+                        console.log("removing everything from this guy.");
+                        Memory.DebugMap[creep.memory.source].storage[i].available = 0;
+                    }
+                    else{
+                        console.log("don't have enough to remove all available");
+                        Memory.DebugMap[creep.memory.source].storage[i].available = Memory.DebugMap[creep.memory.source].storage[i].available - carry;
+                    }
+                    carry -= available;
+                    console.log("creep ", creep.name, "selected storage ", Memory.DebugMap[creep.memory.source].storage[i].id, " with ", carry, "left.");
+                    creep.memory.storage.push(Memory.DebugMap[creep.memory.source].storage[i].id);
+                }
+                if(carry <= 0 ){
+                    break;
+                }
+
+            }
+        }
+        else if(creep.memory.selectedStorage || creep.memory.storage.length > 0){
+            
+            if(!creep.memory.selectedStorage){
+                creep.memory.selectedStorage = creep.memory.storage.shift();
+            }
+
+            storage = Game.getObjectById(creep.memory.selectedStorage);
+            // ensure that our selected storage isn't full
+            if(storage.store[RESOURCE_ENERGY] == storage.store.getCapacity(RESOURCE_ENERGY)){
+                // just search for a new storage
+                creep.memory.selectedStorage = null;
+            }
+            
+            var ret = creep.transfer(storage, RESOURCE_ENERGY)
+            
+            if( ret == ERR_NOT_IN_RANGE){
+                creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+            
+            // null out and move to the next available storage element
+            if( ret == 0 && creep.memory.selectedStorage){
+                //Memory.DebugMap[creep.memory.source].storage[creep.memory.selectedStorage].available = storage.store[RESOURCE_ENERGY];
+                creep.memory.selectedStorage = null;
+            }
+            
+        }
+        else{
+            creep.memory.storage = null; 
+            console.log("Nothing to do for ", creep.name);
+            //roleBuilder.run(creep);       
+        }
     }
 
 }

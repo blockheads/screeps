@@ -6,10 +6,14 @@ var gen = require('util.gen');
 var resource = require('resource');
 require('prototype.room')();
 const WorkerCreep = require('role.worker');
+const FactoryNode = require('./role.factoryNode');
 
 //import WorkerCreep from './WorkerCreep';
 
 var roleWallRepairer = {
+    build: function(creep){
+        return new FactoryNode([WORK,CARRY,MOVE],[WORK,CARRY,MOVE]);
+    },
 
     // perform logic required for our run function
     performLogic : function () {
