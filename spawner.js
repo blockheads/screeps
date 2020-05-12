@@ -173,7 +173,7 @@ var Spawner = {
                 console.log('Spawning new repairer: ' + newName);
         }
 
-    }
+    },
     
 }
 

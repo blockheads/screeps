@@ -135,6 +135,20 @@ var ResourceDataHandler = {
     addCreep: function(creepName){   
         this.creeps.push(creepName);
     },
+
+    getCurrentHarvesters: function(){
+        // this is the forumla I calculated. Initialyl have 6 creeps?
+        // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
+        return this.creeps.length;
+     
+    },
+
+    getMaxHarvesters: function(){
+        // this is the forumla I calculated. Initialyl have 6 creeps?
+        // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
+        return 5 - floor((Memory.maxEnergy-400)/300);
+     
+    },
 }
 
 module.exports = ResourceDataHandler;

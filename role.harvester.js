@@ -3,6 +3,10 @@ var resource = require('resource');
 const roleBuilder = require('./role.worker.builder');
 
 var roleHarvester = {
+    // this defines the harvesters build
+    build: function(creep){
+        
+    },
 
     /** @param {Creep} creep **/
     run: function(creep) {

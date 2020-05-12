@@ -21,6 +21,8 @@ module.exports.loop = function () {
     //spawning in the lads
      for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
+            // update our spawner
+            Manager.respawn(Memory.creeps[name]);
             // we have to get rid of their selected sources too
             resource.DeleteCreep(Memory.creeps[name], name);
             delete Memory.creeps[name];
@@ -28,10 +30,13 @@ module.exports.loop = function () {
         }
     }
     
-    
-    // spawns our screepies
+    // update our managers
+    Manager.update();
+
+    Manager.printSpawns();
+
     Spawner.spawn();
-    
+
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {
         // only repair if we are over half full.
@@ -56,7 +61,7 @@ module.exports.loop = function () {
         }
     }
 
-    
+    // excecute creep logic
     for(var name in Game.creeps) {
 
         var creep = Game.creeps[name];
