@@ -97,12 +97,12 @@ var ResourceDataHandler = {
      * Updates the Memory.Debug Maps available storage
      */
     updateAvailable: function(source){
-        console.log("storage: ", this.storage);
+        //console.log("storage: ", this.storage);
         for(var i in this.storage){
             var cstorage = Game.getObjectById( this.storage[i].id);
             if(cstorage.store[RESOURCE_ENERGY] < cstorage.store.getCapacity(RESOURCE_ENERGY)){
                 this.storage[i].available = cstorage.store.getCapacity(RESOURCE_ENERGY) - cstorage.store[RESOURCE_ENERGY];
-                console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
+                //console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
                 
             }
                 

@@ -1,6 +1,7 @@
 const OopUtil = require('util.oop');
 var resource = require('resource');
 const Manager = require('manager');
+const ResourceDataHandler = require('./resourceDataHandler');
 
 class BaseCreep{
 
@@ -82,12 +83,21 @@ class BaseCreep{
     }
 
     getPriorityStorage(){
+
         this.memory.storage = [];
-        var carry = this.store[RESOURCE_ENERGY];
+        //console.log("name: ", this.name, " home: ", this.memory.home);
+        try{
+            var resourceData = Manager.getCreepResourceData(this);
+            this.memory.storage = ResourceDataHandler.getPossibleStorage.call(resourceData, this);
+        }
+        catch(err){
+            //console.log("threw ", err);
+        }
+            
+    }
 
-        var resourceData = Manager.getCreepResourceData(this);
-        this.memory.storage = resourceData.getPossibleStorage();
-
+    getResourceData(){
+        return Manager.getCreepResourceData(this);
     }
 
 }

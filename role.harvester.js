@@ -7,7 +7,7 @@ var roleHarvester = {
     // this defines the harvesters build
     init: function(creep){
         // uhh probably shouldn't be this dumb of a way to do this... i'm really tired atm
-        Memory.RoomData[creep.memory.home].resourceData[creep.memory.source].creeps.push(creep.name);
+        creep.getResourceData().creeps.push(creep.name);
     },
 
     build: function(creep){
@@ -16,7 +16,6 @@ var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-
         // WORKER CREEP STATES
         // =-----------------=
         // INIT -> WITHDRAW

@@ -10,8 +10,8 @@
 
 const RoleManager = require('role.manager');
 const SpawnManager = require('./manager.spawner');
-const ResourceDataHandler = require('resourceDataHandler');
 const RoomData = require('./roomData');
+const RoomDataHandler = require('RoomDataHandler')
 
 // ROLES name -> file name mapping
 const ROLES = {};
@@ -32,17 +32,21 @@ class Manager {
 
         this._roleManager = new RoleManager();
 
+        // load in our room memory
+        this._loadRoomMemory();
+
         for (var i in ROLES) {
             const RoleClass = require('./role.' + ROLES[i]);
             this._roleManager.registerCreepRole(i, RoleClass);
         }
+
         // constructing our spawn managers for each room
         this._spawnManagers = {};
-        for(var i in Memory.RoomData){
-            this._spawnManagers[i] = new SpawnManager(i,ROLES);
+        for(var i in ROOMS){
+ 
+            if(this._roomData[ROOMS[i]].controlled)
+                this._spawnManagers[ROOMS[i]] = new SpawnManager(this._roomData[ROOMS[i]], ROLES);
         }
-
-        this._loadRoomMemory();
 
         return Manager.instance;
     }
@@ -56,30 +60,30 @@ class Manager {
         // get our max energy
         this.maxEnergy = Game.spawns['Spawn1'].room.energyCapacityAvailable;
         // caching our max energy, it also determines if we should check for updates
-        if(!Memory.maxEnergy ||  this.maxEnergy != Memory.maxEnergy){
+        //if(!Memory.maxEnergy ||  this.maxEnergy != Memory.maxEnergy){
 
             console.log("Max Energy updated... updating");
-            for(var i in Memory.DebugMap){
-                ResourceDataHandler.update.call(Memory.DebugMap[i], Game.spawns['Spawn1'].room, Game.getObjectById(i));    
+            for(var i in this._roomData){
+                RoomDataHandler.update.call(this._roomData[i]);    
             }
 
             Memory.maxEnergy =  this.maxEnergy;
             
-        }
+        //}
 
         // get our current energy
         this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
         // caching out current energy as well
-        if(!Memory.currentEnergy || this.currentEnergy != Memory.currentEnergy){
+        //if(!Memory.currentEnergy || this.currentEnergy != Memory.currentEnergy){
          
             console.log("updating available storage.");
 
-            for(var i in Memory.DebugMap){
-                ResourceDataHandler.updateAvailable.call(Memory.DebugMap[i], i);
+            for(var i in this._roomData){
+                RoomDataHandler.updateAvailable.call(this._roomData[i]);
             }
             
             Memory.currentEnergy = this.currentEnergy;
-        }
+        //}
 
         // attempt to spawn a creep
         for(var i in this._spawnManagers){
@@ -92,6 +96,8 @@ class Manager {
     }
 
     respawn(memory){
+        console.log("memory home: ", memory.home);
+        console.log("spawn managers: ", JSON.stringify(this._spawnManagers));
         this._spawnManagers[memory.home].respawn(memory);
     }
 
@@ -107,9 +113,9 @@ class Manager {
      */
     getCreepResourceData(creep){
         // error handling
-        if(creep.memory.home)
+        if(!creep.memory.home)
             throw "Error. invalid creep, requires home in memory.";
-        if(creep.memory.source)
+        if(!creep.memory.source)
             throw "Error. Creep need's a source specified in order to get resourceData.";
 
         return this._roomData[creep.memory.home].resourceData[creep.memory.source];

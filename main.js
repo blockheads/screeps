@@ -35,8 +35,6 @@ module.exports.loop = function () {
 
     Manager.printSpawns();
 
-    Spawner.spawn();
-
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {
 
@@ -64,7 +62,7 @@ module.exports.loop = function () {
 
     // excecute creep logic
     for(var name in Game.creeps) {
-
+        //console.log("name: ", name);
         var creep = Game.creeps[name];
         
         Manager.getRole(creep.memory.role).run(creep);

@@ -10,13 +10,13 @@ class RoomData{
     constructor(roomId, controlled, initialized){
         this.controlled = controlled;
         this.initialized = initialized;
-        this.resourcedata = new Map();
+        this.resourceData = new Map();
         this.id = roomId;
         if(initialized){
             var room = Game.rooms[this.id];
             var roomSources = room.find(FIND_SOURCES);
             for(var i in roomSources){
-                this.resourcedata[roomSources[i].id] =  new ResourceData(roomSources[i], room);
+                this.resourceData[roomSources[i].id] =  new ResourceData(roomSources[i], room);
             }
         }
         

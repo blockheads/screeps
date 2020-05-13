@@ -14,9 +14,9 @@ const BASE_CREEP_PRICE = 200;
 
 class SpawnManager{
 
-    constructor(roomId, roles){
+    constructor(roomData, roles){
         this._spawnQueue = new PriorityQueue();
-        this._room = roomId;
+        this._roomData = roomData;
         // for right now we just reconstruct our queue each time this
         // manager is initialized, later on we can save it in memory
         // and re-load it to save start-up time...
@@ -30,7 +30,7 @@ class SpawnManager{
      * Attempts to spawn a creep at the top of the spawn queue
      */
     spawn(manager){
-        var creeps = _.filter(Game.creeps, (creep) => creep.memory.home == this._room);
+        var creeps = _.filter(Game.creeps, (creep) => creep.memory.home == this._roomData.id);
         var price = BASE_CREEP_PRICE + creeps.length*75;
 
         // ensure we don't go overboard here
@@ -46,7 +46,7 @@ class SpawnManager{
 
         // can't be spawning
         if(Game.spawns['Spawn1'].spawning)
-            return;
+            return; 
 
         // spawn creep
         var data = this.getNext();
@@ -59,9 +59,11 @@ class SpawnManager{
         var body = RoleFactory.generateBuild(price, role.build());
         //name generation
         var name = role.gen(); 
-        console.log("I would be spawing: ", JSON.stringify(creepData), ", ", JSON.stringify(body), ", ", name);
+        //console.log("I would be spawing: ", JSON.stringify(creepData), ", ", JSON.stringify(body), ", ", name);
 
-        //Game.spawns['Spawn1'].createCreep(body, name, creepData);
+        Game.spawns['Spawn1'].createCreep(body, name, creepData);
+        this.pushBack(data);
+
     }
 
     printQueue(){
@@ -92,10 +94,24 @@ class SpawnManager{
         if(!memory){
             memory = {};
         }
-        memory.home = this._room;
+        memory.home = this._roomData.id;
         memory.role = role;
 
         this._spawnQueue.push(new Node(memory, priority, amount));
+    }
+
+    /**
+     * Pushes back a node on the queue, subtracting it's amount by one.
+     * If the amount is 0, it does not push back
+     * @param {Node} data the node to push back on the queue
+     */
+    pushBack(data){
+        data.amount = data.amount - 1;
+        console.log("data.amount: ", data.amount)
+        if(data.amount > 0){
+            this._spawnQueue.push(data);
+            console.log("pushed back again.");
+        }
     }
 
     /**
@@ -133,18 +149,17 @@ class SpawnManager{
 
     updateHarvesters(){
         // only spawn in claimed rooms
-        if(!Memory.RoomData[this._room].controlled)
+        if(!this._roomData.controlled)
             return;
 
+        for(var i in this._roomData.resourceData){
+            var currentHarvesters = ResourceDataHandler.getCurrentHarvesters.call(this._roomData.resourceData[i]);
+            var maxHarvesters = ResourceDataHandler.getMaxHarvesters.call(this._roomData.resourceData[i]);
 
-        for(var i in Memory.RoomData[this._room].resourcedata){
-            var currentHarvesters = ResourceDataHandler.getCurrentHarvesters.call(Memory.RoomData[this._room].resourcedata[i]);
-            var maxHarvesters = ResourceDataHandler.getMaxHarvesters.call(Memory.RoomData[this._room].resourcedata[i]);
-
-            var amount = maxHarvesters - currentHarvesters;
+            var amount = maxHarvesters - currentHarvesters; 
 
             if(amount > 0){
-                this.push(ROLE_HARVESTER,10,amount, {source: i});
+                this.push(ROLE_HARVESTER,0,amount, {source: i});
             }
             
         }
@@ -152,54 +167,54 @@ class SpawnManager{
     }
 
     updateUpgraders(){
-        if(!Memory.RoomData[this._room].controlled)
+        if(!this._roomData.controlled)
             return;
 
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_UPGRADER);
-        var amount = 5-upgraders.length;
+        var amount = 4-upgraders.length;
 
         if(amount > 0){
-            this.push(ROLE_UPGRADER,9, amount);
+            this.push(ROLE_UPGRADER,1, amount);
         }
 
         
     }
 
     updateRepairers(){
-        if(!Memory.RoomData[this._room].controlled)
+        if(!this._roomData.controlled)
             return;
 
         var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_REPAIRER);
         var amount = 1-repairers.length;
 
         if(amount > 0){
-            this.push(ROLE_REPAIRER,8, amount);
+            this.push(ROLE_REPAIRER,2, amount);
         }
 
     }
 
     updateWallRepairers(){
-        if(!Memory.RoomData[this._room].controlled)
+        if(!this._roomData.controlled)
             return;
 
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_WALL_REPAIRER);
         var amount = 1-upgraders.length;
 
         if(amount > 0){
-            this.push(ROLE_WALL_REPAIRER,7, amount);
+            this.push(ROLE_WALL_REPAIRER,3, amount);
         }
 
     }
 
     updateBuilders(){
-        if(!Memory.RoomData[this._room].controlled)
+        if(!this._roomData.controlled)
             return;
 
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_BUILDER);
         var amount = 0-builders.length;
 
         if(amount > 0){
-            this.push(ROLE_BUILDER,6, amount);
+            this.push(ROLE_BUILDER,4, amount);
         }
 
     }

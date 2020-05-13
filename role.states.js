@@ -21,7 +21,7 @@ var States = {
         }
 
         if(!creep.memory.init){
-            init();
+            init(creep);
             creep.memory.init = true;
         }
 
