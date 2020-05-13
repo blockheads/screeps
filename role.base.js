@@ -1,5 +1,6 @@
 const OopUtil = require('util.oop');
 var resource = require('resource');
+const Manager = require('manager');
 
 class BaseCreep{
 
@@ -44,6 +45,8 @@ class BaseCreep{
             this.memory.withdrawing = false;
         }
         else {
+
+            var resourceData = Manager.getCreepResourceData(this);
             
             var ret = this.withdraw(target, RESOURCE_ENERGY);
             if( ret == ERR_NOT_IN_RANGE){
@@ -52,7 +55,7 @@ class BaseCreep{
             if(ret == 0){
                 for(var i in Memory.DebugMap){
                     for(var j in Memory.DebugMap[i].storage){
-                        if(Memory.DebugMap[i].storage[j].id == this.memory.withdraw){
+                        if(resourceData.storage[j].id == this.memory.withdraw){
                             console.log(this.name, " updated ", j, " to ", target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY]);
                             Memory.DebugMap[i].storage[j].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
                         }
@@ -76,6 +79,15 @@ class BaseCreep{
 
     getHarvestSource(){
         return resource.findOptimalSource(this);
+    }
+
+    getPriorityStorage(){
+        this.memory.storage = [];
+        var carry = this.store[RESOURCE_ENERGY];
+
+        var resourceData = Manager.getCreepResourceData(this);
+        this.memory.storage = resourceData.getPossibleStorage();
+
     }
 
 }

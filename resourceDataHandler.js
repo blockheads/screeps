@@ -149,6 +149,35 @@ var ResourceDataHandler = {
         return 5 - floor((Memory.maxEnergy-400)/300);
      
     },
+
+    getPossibleStorage: function(creep){
+        var carry = creep.store[RESOURCE_ENERGY];
+        var possibleStorage = [];
+
+        for(var i in this.storage){
+            var available = this.storage[i].available;
+            if(available != 0){
+                // subtract however much we are removing from available
+                if(carry > available){
+                    console.log("removing everything from this guy.");
+                    this.storage[i].available = 0;
+                }
+                else{
+                    console.log("don't have enough to remove all available");
+                    this.storage[i].available = this.storage[i].available - carry;
+                }
+                carry -= available;
+                console.log("this ", creep.name, "selected storage ", this.storage[i].id, " with ", carry, "left.");
+                possibleStorage.push(this.storage[i].id);
+            }
+            if(carry <= 0 ){
+                break;
+            }
+        }
+
+        return possibleStorage;
+
+    }
 }
 
 module.exports = ResourceDataHandler;

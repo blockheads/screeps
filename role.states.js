@@ -131,31 +131,8 @@ var States = {
         //hauling
         if(!creep.memory.storage){
             // assigning this creep storage
+            creep.getPriorityStorage();
             
-            creep.memory.storage = [];
-            var carry = creep.store[RESOURCE_ENERGY];
-            
-            for(var i in Memory.DebugMap[creep.memory.source].storage){
-                var available = Memory.DebugMap[creep.memory.source].storage[i].available;
-                if(available != 0){
-                    // subtract however much we are removing from available
-                    if(carry > available){
-                        console.log("removing everything from this guy.");
-                        Memory.DebugMap[creep.memory.source].storage[i].available = 0;
-                    }
-                    else{
-                        console.log("don't have enough to remove all available");
-                        Memory.DebugMap[creep.memory.source].storage[i].available = Memory.DebugMap[creep.memory.source].storage[i].available - carry;
-                    }
-                    carry -= available;
-                    console.log("creep ", creep.name, "selected storage ", Memory.DebugMap[creep.memory.source].storage[i].id, " with ", carry, "left.");
-                    creep.memory.storage.push(Memory.DebugMap[creep.memory.source].storage[i].id);
-                }
-                if(carry <= 0 ){
-                    break;
-                }
-
-            }
         }
         else if(creep.memory.selectedStorage || creep.memory.storage.length > 0){
             

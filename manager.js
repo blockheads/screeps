@@ -11,6 +11,7 @@
 const RoleManager = require('role.manager');
 const SpawnManager = require('./manager.spawner');
 const ResourceDataHandler = require('resourceDataHandler');
+const RoomData = require('./roomData');
 
 // ROLES name -> file name mapping
 const ROLES = {};
@@ -22,11 +23,15 @@ ROLES['longharvester'] = 'longHarvester';
 ROLES['scout'] = 'scout';
 ROLES['wallrepairer'] = 'worker.repairer.wall';
 
+// room data
+const ROOMS = ['W47S15', 'W47S14'];
+
 class Manager {
 
     constructor(){
 
         this._roleManager = new RoleManager();
+
         for (var i in ROLES) {
             const RoleClass = require('./role.' + ROLES[i]);
             this._roleManager.registerCreepRole(i, RoleClass);
@@ -36,6 +41,8 @@ class Manager {
         for(var i in Memory.RoomData){
             this._spawnManagers[i] = new SpawnManager(i,ROLES);
         }
+
+        this._loadRoomMemory();
 
         return Manager.instance;
     }
@@ -79,6 +86,9 @@ class Manager {
             // right now since i'm lazy
             this._spawnManagers[i].spawn(this);
         }
+
+        // update our memory
+        this._roomData = Memory.roomData;
     }
 
     respawn(memory){
@@ -90,6 +100,50 @@ class Manager {
         for(var i in this._spawnManagers){
             this._spawnManagers[i].printQueue();
         }
+    }
+
+    /**
+     * Get's resourceData corresponding to a particular creep
+     */
+    getCreepResourceData(creep){
+        // error handling
+        if(creep.memory.home)
+            throw "Error. invalid creep, requires home in memory.";
+        if(creep.memory.source)
+            throw "Error. Creep need's a source specified in order to get resourceData.";
+
+        return this._roomData[creep.memory.home].resourceData[creep.memory.source];
+    }
+
+    _loadRoomMemory(){
+
+        if(!Memory.roomData){
+            // our roomData is a map
+            this._roomData = new Map();
+            // iterate over specified rooms
+            for(var j in ROOMS){
+
+                console.log("generating room: ", Game.rooms[ROOMS[j]]);
+                console.log("the room we want: ", JSON.stringify(Game.rooms));
+                // if we have data on the room
+                if(Game.rooms[ROOMS[j]]){
+                    var controller = Game.rooms[ROOMS[j]].controller;
+                    this._roomData[ROOMS[j]] = new RoomData(ROOMS[j], controller.my, true);
+                    
+                }
+                else{
+                    this._roomData[ROOMS[j]] = new RoomData(ROOMS[j], false, false);
+                }
+                
+            }
+
+            Memory.roomData = this._roomData;
+        } 
+        else{
+            // otherwise we just load in our roomData normally
+            this._roomData = Memory.roomData;
+        }
+        
     }
 
 }

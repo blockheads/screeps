@@ -62,35 +62,4 @@ class ResourceData {
 
 }
 
-const ROOMS = ['W47S15', 'W47S14'];
-
-if(!Memory.RoomData){
-    Memory.RoomData = new Map();
-    // iterate over specified rooms
-    for(var j in ROOMS){
-        // retrieve all of the room's sources
-        Memory.RoomData[ROOMS[j]] = new Map();
-        Memory.RoomData[ROOMS[j]].resourcedata = new Map();
-        console.log("generating room: ", Game.rooms[ROOMS[j]]);
-        console.log("the room we want: ", JSON.stringify(Game.rooms));
-        // if we have data on the room
-        if(Game.rooms[ROOMS[j]]){
-            var controller = Game.rooms[ROOMS[j]].controller;
-            Memory.RoomData[ROOMS[j]].controlled = controller.my
-            Memory.RoomData[ROOMS[j]].initialized = true;
-            var roomSources =  Game.rooms[ROOMS[j]].find(FIND_SOURCES);
-            for(var i in roomSources){
-                Memory.RoomData[ROOMS[j]].resourcedata[roomSources[i].id] =  new ResourceData(roomSources[i], Game.rooms[ROOMS[j]]);
-            }
-        }
-        else{
-            Memory.RoomData[ROOMS[j]].initialized = false;
-            Memory.RoomData[ROOMS[j]].controlled = false;
-        }
-        
-    }
-
-    
-} 
-
 module.exports = ResourceData;

@@ -39,6 +39,13 @@ module.exports.loop = function () {
 
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {
+
+        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if(closestHostile) {
+            tower.attack(closestHostile);
+            Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
+        }
+
         // only repair if we are over half full.
         if(tower.store[RESOURCE_ENERGY] > 500){
             var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -52,13 +59,7 @@ module.exports.loop = function () {
                 Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
             }
         }
-       
-
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if(closestHostile) {
-            tower.attack(closestHostile);
-            Memory.DebugMap[creep.memory.source].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
-        }
+        
     }
 
     // excecute creep logic
