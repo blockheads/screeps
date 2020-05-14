@@ -1,4 +1,4 @@
-const { floor } = require("lodash");
+const { floor, map } = require("lodash");
 
 const CREEP_PER_ENERGY = 150;
 const RESOURCE_RADIUS = 10;
@@ -52,7 +52,8 @@ var ResourceDataHandler = {
                         // then we check if it is a wall
                         
                         //console.log("struct: ", ret[i][j][k][LOOK_STRUCTURES]['structureType']);
-                        var storageData = {"id":  ret[i][j][k][LOOK_STRUCTURES]['id'], "available": 0, "structureType": ret[i][j][k][LOOK_STRUCTURES]['structureType']};
+                        var storageData = {"id":  ret[i][j][k][LOOK_STRUCTURES]['id'], "available": 0, "structureType": ret[i][j][k][LOOK_STRUCTURES]['structureType'],
+                                           "pos": ret[i][j][k][LOOK_STRUCTURES]['pos']};
                         //console.log("current type: ", ret[i][j][k]["type"]);
 
                         if(ret[i][j][k][LOOK_STRUCTURES]['structureType'] == STRUCTURE_EXTENSION
@@ -77,9 +78,11 @@ var ResourceDataHandler = {
             return Math.sqrt(x2 + y2);
         }
         // sort our arrays
-        mainStorage.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-        towers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
-        containers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
+        mainStorage = mainStorage.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
+        towers = towers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
+        containers = containers.sort((a, b) => (distanceToSource( Game.getObjectById(a.id)) > distanceToSource( Game.getObjectById(b.id))) ? 1 : -1);
+
+        this.containers = containers;
 
         var storageList = mainStorage.concat(towers,containers);
 
@@ -89,8 +92,8 @@ var ResourceDataHandler = {
         }
 
         console.log(JSON.stringify(this.storage));
-        
 
+        
     },
 
     /**
@@ -178,6 +181,7 @@ var ResourceDataHandler = {
         return possibleStorage;
 
     }
+
 }
 
 module.exports = ResourceDataHandler;

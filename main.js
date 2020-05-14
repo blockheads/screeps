@@ -1,5 +1,4 @@
 const resource = require('resource');
-const Spawner = require('spawner');
 
 const roleHarvester = require('role.harvester');
 const roleLongHarvester = require('role.longHarvester');
@@ -22,7 +21,7 @@ module.exports.loop = function () {
      for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             // update our spawner
-            Manager.respawn(Memory.creeps[name]);
+            Manager.respawn(Memory.creeps[name],name);
             // we have to get rid of their selected sources too
             resource.DeleteCreep(Memory.creeps[name], name);
             delete Memory.creeps[name];

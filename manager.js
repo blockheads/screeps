@@ -95,14 +95,14 @@ class Manager {
         this._roomData = Memory.roomData;
     }
 
-    respawn(memory){
+    respawn(memory,name){
         // we can re-work how this works later...
-        if(memory.source){
+        if(memory.home && memory.source){
               // deleting from other lad too
-              for(var j=0; j < this._roomData[memory.home].resourceData.creeps.length; j++){
+              for(var j=0; j < this._roomData[memory.home].resourceData[memory.source].creeps.length; j++){
                 // iterate over our creep array
-                if(this._roomData[memory.home].resourceData.creeps[j] == name){
-                    this._roomData[memory.home].resourceData.creeps.splice(j,1);
+                if(this._roomData[memory.home].resourceData[memory.source].creeps[j] == name){
+                    this._roomData[memory.home].resourceData[memory.source].creeps.splice(j,1);
                     memory.source = null; 
                     //console.log("deleted ", name, " now ", memory.source, ".");
                     return;
