@@ -41,7 +41,7 @@ module.exports.loop = function () {
         var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if(closestHostile) {
             tower.attack(closestHostile);
-            Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
+            //Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
         }
 
         // only repair if we are over half full.
@@ -54,7 +54,7 @@ module.exports.loop = function () {
             });
             if(closestDamagedStructure) {
                 tower.repair(closestDamagedStructure);
-                Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
+                //Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
             }
         }
         

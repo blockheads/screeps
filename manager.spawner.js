@@ -62,7 +62,6 @@ class SpawnManager{
         //console.log("I would be spawing: ", JSON.stringify(creepData), ", ", JSON.stringify(body), ", ", name);
 
         Game.spawns['Spawn1'].createCreep(body, name, creepData);
-        this.pushBack(data);
 
     }
 
