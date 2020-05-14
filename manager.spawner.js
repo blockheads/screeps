@@ -15,7 +15,7 @@ const BASE_CREEP_PRICE = 200;
 class SpawnManager{
 
     constructor(roomData, roles){
-        this._spawnQueue = new PriorityQueue();
+        this._spawnQueue = new PriorityQueue(); 
         this._roomData = roomData;
         // for right now we just reconstruct our queue each time this
         // manager is initialized, later on we can save it in memory
@@ -69,7 +69,7 @@ class SpawnManager{
     printQueue(){
         var queue =  this._spawnQueue.getList();
         for(var i in queue){
-            console.log("i: ", i, "(",  JSON.stringify(queue[i].value), ", ", queue[i].priority ,", ",  queue[i].amount, " )");
+            console.log("i: ", i, "(",  JSON.stringify(queue[i].value), ", ", queue[i].priority);
         }
     }
 
@@ -96,8 +96,10 @@ class SpawnManager{
         }
         memory.home = this._roomData.id;
         memory.role = role;
+        for(var i=0; i < amount; i++){
+            this._spawnQueue.push(new Node(memory, priority));
+        }
 
-        this._spawnQueue.push(new Node(memory, priority, amount));
     }
 
     /**

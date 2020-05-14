@@ -96,6 +96,36 @@ class PriorityQueue{
         return poppedNode;
     }
 
+    /**
+     * Check's if the priority queue contains a particular node value
+     * this should be moved out to be a funciton of a extended class
+     * but... whatever...
+     */
+    hasRole(role){
+        for(var i in this.values){
+            if(this.values[i].value.role == role){
+                return true;
+            }
+        }
+        return false;
+    }
+
+      /**
+     * Check's if the priority queue contains a particular node value,
+     * if so it increments it
+     * this should be moved out to be a funciton of a extended class
+     * but... whatever...
+     */
+    // incrementRole(memory){
+    //     for(var i in this.values){
+    //         if(this.values[i].value == memory){
+    //             this.values[i].amount = this.values[i].amount + 1;
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
     empty(){
         //console.log("values length: ", this.values.length);
         //console.log("equal to 0? ", this.values.length == 0);

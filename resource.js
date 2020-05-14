@@ -1,20 +1,3 @@
-// initializing our resource map if it hasn't been defined
-if(!Memory.ResourceMap){
-    console.log("initialized resource map");
-    ResourceMap = new Map();
-    Memory.ResourceMap = ResourceMap;
-    
-    //console.log("wrote out: ", JSON.stringify(ResourceMap));
-}
-
-// debug purposes
-console.log("Current Resource Map data...");
-for (var source in Memory.ResourceMap) {
-    screeps = Memory.ResourceMap[source];
-    console.log(source + ' has ' + screeps + ' screeps active.');
-    
-}
-
 // this makes kicking significant, if not the resources are near 
 // equidistant so it really doesn't matter anyways
 const KICK_OFFSET = 5;

@@ -47,18 +47,19 @@ class BaseCreep{
         }
         else {
 
-            var resourceData = Manager.getCreepResourceData(this);
+            //var resourceData = Manager.getCreepResourceData(this);
             
             var ret = this.withdraw(target, RESOURCE_ENERGY);
             if( ret == ERR_NOT_IN_RANGE){
                 this.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
             }
+            // this sucks TODO FIX
             if(ret == 0){
-                for(var i in Memory.DebugMap){
-                    for(var j in Memory.DebugMap[i].storage){
-                        if(resourceData.storage[j].id == this.memory.withdraw){
+                for(var i in Memory.roomData){
+                    for(var j in Memory.roomData[i].storage){
+                        if(Memory.roomData[i].storage[j].id == this.memory.withdraw){
                             console.log(this.name, " updated ", j, " to ", target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY]);
-                            Memory.DebugMap[i].storage[j].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
+                            Memory.roomData[i].storage[j].available = target.store.getCapacity(RESOURCE_ENERGY) - target.store[RESOURCE_ENERGY];
                         }
                     }
                     
