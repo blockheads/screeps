@@ -107,9 +107,14 @@ class BaseCreep{
         ResourceDataHandler.updateStorageStruct.call(this.getResourceData(),storage.id, value);
     }
 
-    moveToPush(path, visualizePathStyle){
+    moveToPush(target, visualizePathStyle){
         console.log("overridden!");
-        this.moveTo(path,visualizePathStyle);
+        
+        this.moveTo(target,visualizePathStyle);
+        var path = this.pos.findPathTo(target);
+        Manager.pushPath(path, this);
+        
+       
     }
 
 }

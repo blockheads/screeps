@@ -30,7 +30,7 @@ var roleRepairer = {
         var target = targets[0];
 
         if(this.repair(target) == ERR_NOT_IN_RANGE) {
-            this.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
+            this.moveToPush(target, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
 
         if(target.structureType == STRUCTURE_ROAD && target.hits == 5000){

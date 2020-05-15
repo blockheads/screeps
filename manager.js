@@ -174,6 +174,19 @@ class Manager {
         }
         
     }
+    
+    pushPath(path, creep){
+        this._constructionManagers[creep.memory.home].pushPath(path);
+    }
+    
+    printPaths(){
+        for(var i in ROOMS){
+ 
+            if(this._roomData[ROOMS[i]].controlled){
+                this._constructionManagers[ROOMS[i]].printPathMap();
+            }
+        }
+    }
 
 }
 

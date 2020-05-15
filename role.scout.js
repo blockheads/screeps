@@ -40,7 +40,7 @@ var roleScout = {
                 
                 var exit = creep.room.findExitTo(creep.memory.goalRoom);
                 console.log("exit: ", exit);
-                creep.moveTo(creep.pos.findClosestByRange(exit), {visualizePathStyle: {stroke: '#ffffff'}});
+                creep.moveToPush(creep.pos.findClosestByRange(exit), {visualizePathStyle: {stroke: '#ffffff'}});
             }
             
         }

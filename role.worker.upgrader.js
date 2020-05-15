@@ -11,7 +11,7 @@ var roleUpgrader = {
 
     performLogic: function(){
         if(this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {
-            this.moveTo(this.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            this.moveToPush(this.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
         }
         if(this.store[RESOURCE_ENERGY] == 0){
             this.memory.working = false;

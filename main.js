@@ -33,6 +33,8 @@ module.exports.loop = function () {
 
     Manager.printSpawns();
 
+    Manager.printPaths();
+
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {
 
@@ -67,5 +69,8 @@ module.exports.loop = function () {
         
     }
     var end = Game.cpu.getUsed();
+
+
+
     console.log("cpu used this tick: ", end - start);
 }

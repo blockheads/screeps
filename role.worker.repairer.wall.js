@@ -23,7 +23,7 @@ var roleWallRepairer = {
         var target = targets[0];
 
         if(this.repair(target) == ERR_NOT_IN_RANGE) {
-            this.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
+            this.moveToPush(target, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
         
         //console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);

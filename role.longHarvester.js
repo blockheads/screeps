@@ -84,7 +84,7 @@ var roleLongHarvester = {
                     var ret = creep.transfer(storage, RESOURCE_ENERGY)
                     
                     if( ret == ERR_NOT_IN_RANGE){
-                        creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                        creep.moveToPush(storage, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
                     
                     // null out and move to the next available storage element

@@ -13,13 +13,20 @@
 
     
     pushPath(path){
-
-        if(this._roadMap.has(path)){
-            this._roadMap.set(path,this._roadMap.get(path) + 1);
-            return;
+       
+        for(var i in path){
+            var pos =  JSON.stringify({x: path[i].x, y: path[i].y});
+            //console.log("Position: ", pos);
+            if(this._roadMap.get(pos)){
+                this._roadMap.set(pos, this._roadMap.get(pos) + 1);
+            }
+            else{
+                // otherwise we just set it to 0 for our first occurence
+                this._roadMap.set(pos, 1);
+            }
+            
         }
-        // otherwise we just set it to 0 for our first occurence
-        this._roadMap.set(path, 0);        
+        
     }
 
     /**
@@ -27,9 +34,9 @@
      */
     printPathMap(){
         console.log("!-------ROAD MAP-----------!");
-        this._roadMap.forEach( p => {
-            console.log("Path: ", JSON.stringify(p), " #", this._roadMap.get(p));
-        });
+        for (let [k,v] of this._roadMap) {
+            console.log("Key: " + k, " val: ", v);
+        }
     }
 
  }

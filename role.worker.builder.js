@@ -21,7 +21,7 @@ var roleBuilder = {
             }
 
             if(this.build(target) == ERR_NOT_IN_RANGE) {
-                this.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
+                this.moveToPush(target, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
     },
