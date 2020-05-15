@@ -11,17 +11,20 @@
 const RoleManager = require('role.manager');
 const SpawnManager = require('./manager.spawner');
 const RoomData = require('./roomData');
-const RoomDataHandler = require('RoomDataHandler')
+const RoomDataHandler = require('RoomDataHandler');
+const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_BUILDER, ROLE_REPAIRER, ROLE_LONG_HARVESTER, ROLE_SCOUT, ROLE_WALL_REPAIRER, 
+    ROLE_HARVESTER_PRIORITY, ROLE_UPGRADER_PRIORITY, ROLE_BUILDER_PRIORITY, ROLE_REPIARER_PRIORITY, ROLE_LONG_HARVESTER_PRIORITY, 
+    ROLE_SCOUT_PRIORITY, ROLE_WALL_REPAIRER_PRIORITY } = require('./util.role');
 
-// ROLES name -> file name mapping
+// ROLES name -> file name mapping , priority
 const ROLES = {};
-ROLES['harvester'] = 'harvester';
-ROLES['upgrader'] = 'worker.upgrader';
-ROLES['builder'] = 'worker.builder';
-ROLES['repairer'] = 'worker.repairer';
-ROLES['longharvester'] = 'longHarvester';
-ROLES['scout'] = 'scout';
-ROLES['wallrepairer'] = 'worker.repairer.wall';
+ROLES[ROLE_HARVESTER] = ['harvester', ROLE_HARVESTER_PRIORITY];
+ROLES[ROLE_UPGRADER] = ['worker.upgrader', ROLE_UPGRADER_PRIORITY];
+ROLES[ROLE_BUILDER] = ['worker.builder', ROLE_BUILDER_PRIORITY];
+ROLES[ROLE_REPAIRER] = ['worker.repairer', ROLE_REPIARER_PRIORITY];
+ROLES[ROLE_LONG_HARVESTER] = ['longHarvester', ROLE_LONG_HARVESTER_PRIORITY];
+ROLES[ROLE_SCOUT] = ['scout', ROLE_SCOUT_PRIORITY];
+ROLES[ROLE_WALL_REPAIRER] = ['worker.repairer.wall', ROLE_WALL_REPAIRER_PRIORITY];
 
 // room data
 const ROOMS = ['W47S15', 'W47S14'];
@@ -36,7 +39,7 @@ class Manager {
         this._loadRoomMemory();
 
         for (var i in ROLES) {
-            const RoleClass = require('./role.' + ROLES[i]);
+            const RoleClass = require('./role.' + ROLES[i][0]);
             this._roleManager.registerCreepRole(i, RoleClass); 
         }
 

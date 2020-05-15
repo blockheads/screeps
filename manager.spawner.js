@@ -20,6 +20,8 @@ class SpawnManager{
         // for right now we just reconstruct our queue each time this
         // manager is initialized, later on we can save it in memory
         // and re-load it to save start-up time...
+        this._roles = roles;
+        
         for(var i in roles){
             this.update(i);
         }
@@ -87,12 +89,16 @@ class SpawnManager{
      * @param {Creep} creep The creep to push
      * @param {int} priority Priority value of creep in queue
      */
-    push(role, priority, amount, memory){
+    push(role, amount, memory){
         // let's initialize our memory for the curret creep
         // then the individual update functions can add to this
         if(!memory){
             memory = {};
         }
+
+        //need to define in manager map if this throws exception
+        var priority = this._roles[role][1];
+
         memory.home = this._roomData.id;
         memory.role = role;
         for(var i=0; i < amount; i++){
@@ -144,8 +150,9 @@ class SpawnManager{
     // respawns a creep that died
     respawn(memory){
         console.log("creep died should re-add to spawnQueue");
-        //this.push(memory.role, memory.)
-        this.update(memory.role);
+        // re-init.
+        memory.state = 0;
+        this.push(memory.role, 1, memory);
     }
 
 
@@ -166,7 +173,7 @@ class SpawnManager{
             var amount = maxHarvesters - currentHarvesters; 
 
             if(amount > 0){
-                this.push(ROLE_HARVESTER,0,amount, {source: i});
+                this.push(ROLE_HARVESTER,amount, {source: i});
             }
             
         }
@@ -181,7 +188,7 @@ class SpawnManager{
         var amount = 4-upgraders.length;
 
         if(amount > 0){
-            this.push(ROLE_UPGRADER,1, amount);
+            this.push(ROLE_UPGRADER, amount);
         }
 
         
@@ -195,7 +202,7 @@ class SpawnManager{
         var amount = 1-repairers.length;
 
         if(amount > 0){
-            this.push(ROLE_REPAIRER,2, amount);
+            this.push(ROLE_REPAIRER, amount);
         }
 
     }
@@ -208,7 +215,7 @@ class SpawnManager{
         var amount = 1-upgraders.length;
 
         if(amount > 0){
-            this.push(ROLE_WALL_REPAIRER,3, amount);
+            this.push(ROLE_WALL_REPAIRER, amount);
         }
 
     }
@@ -221,7 +228,7 @@ class SpawnManager{
         var amount = 0-builders.length;
 
         if(amount > 0){
-            this.push(ROLE_BUILDER,4, amount);
+            this.push(ROLE_BUILDER, amount);
         }
 
     }
