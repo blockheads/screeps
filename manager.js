@@ -84,7 +84,7 @@ class Manager {
         //}
 
         // get our current energy
-        //this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
+        this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
         // caching out current energy as well
         //if(!Memory.currentEnergy || this.currentEnergy != Memory.currentEnergy){
          
@@ -94,13 +94,14 @@ class Manager {
             //RoomDataHandler.updateAvailable.call(this._roomData[i]);
         //}
         
-        //Memory.currentEnergy = this.currentEnergy;
+        Memory.currentEnergy = this.currentEnergy;
         //}
 
         // attempt to spawn a creep
         for(var i in this._spawnManagers){
             // right now since i'm lazy
             this._spawnManagers[i].spawn(this);
+            this._spawnManagers[i].update();
             
         }
 
@@ -108,7 +109,7 @@ class Manager {
             this._constructionManagers[i].update(this._roomData[i].resourceData);
         }
 
-        this._flagManager.update();
+        this._flagManager.update(); 
 
         // update our memory
         Memory.roomData = this._roomData;

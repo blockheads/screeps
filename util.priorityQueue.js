@@ -136,6 +136,16 @@ class PriorityQueue{
         return this.values;
         
     }
+
+    getRoleAmount(role){
+        var total = 0;
+        for(var i in this.values){
+            if(this.values[i].value.role == role){
+                total+=1;
+            }
+        }
+        return total;
+    }
 }
 
 module.exports = PriorityQueue;

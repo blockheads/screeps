@@ -16,23 +16,29 @@ const BASE_CREEP_PRICE = 200;
 class SpawnManager{
 
     constructor(roomData, roles){
-        this._spawnQueue = new PriorityQueue();
+       
         this._roomData = roomData;
         // for right now we just reconstruct our queue each time this
         // manager is initialized, later on we can save it in memory
         // and re-load it to save start-up time...
         this._roles = roles;
         
+
+        this._spawnQueue = new PriorityQueue();
+
         for(var i in roles){
-            this.update(i);
+            this.updateRole(i);
         }
 
+        Memory.spawnQueue = this._spawnQueue;
+        
     }
 
     /**
      * Attempts to spawn a creep at the top of the spawn queue
      */
     spawn(manager){
+
         var creeps = _.filter(Game.creeps, (creep) => creep.memory.home == this._roomData.id);
         var price = BASE_CREEP_PRICE + creeps.length*75;
 
@@ -62,9 +68,10 @@ class SpawnManager{
         var body = RoleFactory.generateBuild(price, role.build());
         //name generation
         var name = role.gen(); 
-        //console.log("I would be spawing: ", JSON.stringify(creepData), ", ", JSON.stringify(body), ", ", name);
+        console.log("I would be spawing: ", JSON.stringify(creepData), ", ", JSON.stringify(body), ", ", name);
 
         Game.spawns['Spawn1'].createCreep(body, name, creepData);
+
 
     }
 
@@ -126,7 +133,7 @@ class SpawnManager{
      * Updates a specific creep role type in the spawn queue.
      * @param {Int} role Creep Role Type integer
      */
-    update(role){
+    updateRole(role){
 
         switch(role){
             case ROLE_HARVESTER:
@@ -141,14 +148,19 @@ class SpawnManager{
             case ROLE_WALL_REPAIRER:
                 this.updateWallRepairers();
                 break;
-            case ROLE_BUILDER:
-                this.updateBuilders();
-                break;
             
         }
     }
 
-    // respawns a creep that died
+    update(){
+       var constructionSites = Game.rooms[this._roomData.id].find(FIND_CONSTRUCTION_SITES);
+
+       if(constructionSites.length > 0)
+           this.updateBuilders();
+
+    }
+
+    // respawns a creep that died 
     respawn(memory, name){
         if(memory.home && memory.source){
             // deleting from other lad too
@@ -156,9 +168,7 @@ class SpawnManager{
               // iterate over our creep array
               if(this._roomData.resourceData[memory.source].creeps[j] == name){
                   this._roomData.resourceData[memory.source].creeps.splice(j,1);
-                  memory.source = null; 
                   //console.log("deleted ", name, " now ", memory.source, ".");
-                  return;
               }
           }
       }
@@ -166,7 +176,7 @@ class SpawnManager{
         console.log("creep died should re-add to spawnQueue");
         // re-init.
         memory.state = States.INIT;
-        this.push(memory.role, 1, memory);
+        this.updateRole(memory.role);
     }
 
 
@@ -184,7 +194,7 @@ class SpawnManager{
             var currentHarvesters = ResourceDataHandler.getCurrentHarvesters.call(this._roomData.resourceData[i]);
             var maxHarvesters = ResourceDataHandler.getMaxHarvesters.call(this._roomData.resourceData[i]);
 
-            var amount = maxHarvesters - currentHarvesters; 
+            var amount = maxHarvesters - currentHarvesters-this._spawnQueue.getRoleAmount(ROLE_HARVESTER); 
 
             if(amount > 0){
                 this.push(ROLE_HARVESTER,amount, {source: i});
@@ -199,7 +209,7 @@ class SpawnManager{
             return;
 
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_UPGRADER);
-        var amount = 4-upgraders.length;
+        var amount = 4-upgraders.length-this._spawnQueue.getRoleAmount(ROLE_UPGRADER);
 
         if(amount > 0){
             this.push(ROLE_UPGRADER, amount);
@@ -213,7 +223,7 @@ class SpawnManager{
             return;
 
         var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_REPAIRER);
-        var amount = 1-repairers.length;
+        var amount = 1-repairers.length-this._spawnQueue.getRoleAmount(ROLE_REPAIRER);
 
         if(amount > 0){
             this.push(ROLE_REPAIRER, amount);
@@ -226,7 +236,7 @@ class SpawnManager{
             return;
 
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_WALL_REPAIRER);
-        var amount = 1-upgraders.length;
+        var amount = 1-upgraders.length-this._spawnQueue.getRoleAmount(ROLE_WALL_REPAIRER);
 
         if(amount > 0){
             this.push(ROLE_WALL_REPAIRER, amount);
@@ -239,11 +249,12 @@ class SpawnManager{
             return;
 
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_BUILDER);
-        var amount = 2-builders.length;
+        var amount = 2-this._spawnQueue.getRoleAmount(ROLE_BUILDER);
 
         if(amount > 0){
             this.push(ROLE_BUILDER, amount);
         }
+        
 
     }
 
