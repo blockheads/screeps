@@ -18,11 +18,11 @@ var roleRepairer = {
         if(this.store[RESOURCE_ENERGY] == 0){
             this.memory.working = false;
         }
-        console.log("ROLE REPAIRER I have been called. reparing...");
+        //console.log("ROLE REPAIRER I have been called. reparing...");
         var targets = this.room.getRepairTargets();
         
         if(targets.length <= 0){
-            console.log("no targets");
+            //console.log("no targets");
             this.memory.working = false;
             return;
         }
@@ -41,7 +41,7 @@ var roleRepairer = {
             this.memory.working = false;
         }
         
-        console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);
+        //console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);
 
     },
 

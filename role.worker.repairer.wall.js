@@ -17,7 +17,7 @@ var roleWallRepairer = {
 
     // perform logic required for our run function
     performLogic : function () {
-        console.log("ROLE WALL REPAIRER reparing...", this.name);
+        //console.log("ROLE WALL REPAIRER reparing...", this.name);
 
         targets = this.room.getWallRepairTargets();
         var target = targets[0];
@@ -26,7 +26,7 @@ var roleWallRepairer = {
             this.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
         
-        console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);
+        //console.log("target: (", target.pos.x, ",", target.pos.y, ") health: ", target.hits);
     },
     
     init: function(){

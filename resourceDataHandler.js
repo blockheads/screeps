@@ -101,16 +101,16 @@ var ResourceDataHandler = {
      */
     updateAvailable: function(){
         var start = Game.cpu.getUsed();
-        console.log("storage: ", this.storage);
+        //console.log("storage: ", this.storage);
         for(var i in this.storage){
             var cstorage = Game.getObjectById(i);
             if(!cstorage){
-                console.log("removing storage: ", i);
+                //console.log("removing storage: ", i);
                 this.removeStorage(i);
             }
-            else if(cstorage.store[RESOURCE_ENERGY] < cstorage.store.getCapacity(RESOURCE_ENERGY)){
+            else{
                 this.storage[i].available = cstorage.store.getCapacity(RESOURCE_ENERGY) - cstorage.store[RESOURCE_ENERGY];
-                console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
+                //console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
                 
             }
                 
@@ -171,6 +171,10 @@ var ResourceDataHandler = {
             if(available != 0){
                 // subtract however much we are removing from available
                 if(carry > available){
+                    this.storage[i].available = 0;
+                }
+                else{
+                    this.storage[i].available = available - carry;
                 }
                 carry -= available;
                 possibleStorage.push(i);

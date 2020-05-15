@@ -96,7 +96,7 @@ var roleLongHarvester = {
                 }
                 else{
                     creep.memory.storage = null; 
-                    console.log("Nothing to do for ", creep.name);
+                    //console.log("Nothing to do for ", creep.name);
                     //roleBuilder.run(creep);       
                 }
             }

@@ -16,7 +16,7 @@ const Manager = require('manager');
 
 
 module.exports.loop = function () {
-    
+    var start = Game.cpu.getUsed();
     //spawning in the lads
      for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
@@ -28,10 +28,10 @@ module.exports.loop = function () {
         }
     }
     
-    // update our managers
+    // update our managers 
     Manager.update();
 
-    //Manager.printSpawns();
+    Manager.printSpawns();
 
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {
@@ -66,4 +66,6 @@ module.exports.loop = function () {
         Manager.getRole(creep.memory.role).run(creep);
         
     }
+    var end = Game.cpu.getUsed();
+    console.log("cpu used this tick: ", end - start);
 }

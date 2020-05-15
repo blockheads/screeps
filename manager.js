@@ -10,6 +10,7 @@
 
 const RoleManager = require('role.manager');
 const SpawnManager = require('./manager.spawner');
+const ConstructionManager = require('./manager.construction');
 const RoomData = require('./roomData');
 const RoomDataHandler = require('RoomDataHandler');
 const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_BUILDER, ROLE_REPAIRER, ROLE_LONG_HARVESTER, ROLE_SCOUT, ROLE_WALL_REPAIRER, 
@@ -45,11 +46,16 @@ class Manager {
 
         // constructing our spawn managers for each room
         this._spawnManagers = {};
+        this._constructionManagers = {};
         for(var i in ROOMS){
  
-            if(this._roomData[ROOMS[i]].controlled)
+            if(this._roomData[ROOMS[i]].controlled){
                 this._spawnManagers[ROOMS[i]] = new SpawnManager(this._roomData[ROOMS[i]], ROLES);
+                this._constructionManagers[ROOMS[i]] = new ConstructionManager(ROOMS[i]);
+            }
+                
         }
+        
 
         return Manager.instance;
     }
@@ -75,17 +81,17 @@ class Manager {
         }
 
         // get our current energy
-        this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
+        //this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
         // caching out current energy as well
         //if(!Memory.currentEnergy || this.currentEnergy != Memory.currentEnergy){
          
-            console.log("updating available storage.");
+            //console.log("updating available storage.");
 
-            for(var i in this._roomData){
-                RoomDataHandler.updateAvailable.call(this._roomData[i]);
-            }
-            
-            Memory.currentEnergy = this.currentEnergy;
+        for(var i in this._roomData){
+            RoomDataHandler.updateAvailable.call(this._roomData[i]);
+        }
+        
+        //Memory.currentEnergy = this.currentEnergy;
         //}
 
         // attempt to spawn a creep

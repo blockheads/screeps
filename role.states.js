@@ -124,6 +124,7 @@ var States = {
 
         if(creep.store[RESOURCE_ENERGY] == 0){
             creep.memory.state = transitionState;
+            creep.memory.selectedStorage = null;
             creep.memory.storage = null;
             return;
         }
@@ -132,7 +133,7 @@ var States = {
         if(!creep.memory.storage){
             // assigning this creep storage
             creep.getPriorityStorage();
-            console.log("creep: ", creep.name, " selected: ", JSON.stringify(creep.memory.storage));
+            //console.log("creep: ", creep.name, " selected: ", JSON.stringify(creep.memory.storage));
             
         }
         else if(creep.memory.selectedStorage || creep.memory.storage.length > 0){
@@ -145,7 +146,7 @@ var States = {
             // ensure that our selected storage isn't full
             if(storage.store[RESOURCE_ENERGY] == storage.store.getCapacity(RESOURCE_ENERGY)){
                 // just search for a new storage
-                //creep.updateStorage(storage);
+                creep.updateStorage(storage);
                 creep.memory.selectedStorage = null;
             }
             
@@ -158,13 +159,13 @@ var States = {
             // null out and move to the next available storage element
             if( ret == 0 && creep.memory.selectedStorage){
                 //Memory.DebugMap[creep.memory.source].storage[creep.memory.selectedStorage].available = storage.store[RESOURCE_ENERGY];
-                //creep.updateStorage(storage);
+                creep.updateStorage(storage);
             }
             
         }
         else{
             creep.memory.storage = null; 
-            console.log("Nothing to do for ", creep.name);
+            //console.log("Nothing to do for ", creep.name);
             //roleBuilder.run(creep);       
         }
     }
