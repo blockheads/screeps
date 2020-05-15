@@ -82,7 +82,7 @@ var Resource = {
                         
                     }
                 }
-                console.log("Wall total: ", wallTotal);
+                //console.log("Wall total: ", wallTotal);
                 var avaibleSlots = 9 - wallTotal;
                 Memory.ResourceMap[sources[z].id] = [avaibleSlots];
             }
@@ -102,7 +102,7 @@ var Resource = {
                 source =  sources[i].id;
             }
         }
-        console.log("selected optimal source: ", source);
+        //console.log("selected optimal source: ", source);
         return source;
 
         // sort our sorces by distnace to our creep

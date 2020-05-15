@@ -20,7 +20,7 @@ var RoleFactory = {
            
             for(var i in node.pattern){
                 total += BODYPART_COST[node.pattern[i]];
-                console.log("total: ", total);
+                //console.log("total: ", total);
                 if(total >= maxPrice){
                     return parts;
                 }

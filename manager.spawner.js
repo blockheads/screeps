@@ -9,6 +9,7 @@ const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_WALL_REPAIRER, ROLE_B
 const ResourceDataHandler = require("./resourceDataHandler");
 const Node = require("./util.node");
 const RoleFactory = require("./role.factory");
+const States = require("./role.states");
 
 const BASE_CREEP_PRICE = 200;
 
@@ -52,9 +53,9 @@ class SpawnManager{
 
         // spawn creep
         var data = this.getNext();
-        console.log("data: ", data);  
+        //console.log("data: ", data);  
         var creepData = data.value;
-        console.log("creep data: ", creepData); 
+        //console.log("creep data: ", creepData); 
         if(!creepData)
             return;
         var role = manager.getRole(creepData.role);
@@ -151,7 +152,7 @@ class SpawnManager{
     respawn(memory){
         console.log("creep died should re-add to spawnQueue");
         // re-init.
-        memory.state = 0;
+        memory.state = States.INIT;
         this.push(memory.role, 1, memory);
     }
 

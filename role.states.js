@@ -132,6 +132,7 @@ var States = {
         if(!creep.memory.storage){
             // assigning this creep storage
             creep.getPriorityStorage();
+            console.log("creep: ", creep.name, " selected: ", JSON.stringify(creep.memory.storage));
             
         }
         else if(creep.memory.selectedStorage || creep.memory.storage.length > 0){

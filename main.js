@@ -32,7 +32,7 @@ module.exports.loop = function () {
     // update our managers
     Manager.update();
 
-    Manager.printSpawns();
+    //Manager.printSpawns();
 
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {

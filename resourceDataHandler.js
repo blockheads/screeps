@@ -109,7 +109,7 @@ var ResourceDataHandler = {
             }
             else if(cstorage.store[RESOURCE_ENERGY] < cstorage.store.getCapacity(RESOURCE_ENERGY)){
                 this.storage[i].available = cstorage.store.getCapacity(RESOURCE_ENERGY) - cstorage.store[RESOURCE_ENERGY];
-                //console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
+                console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
                 
             }
                 
@@ -182,7 +182,7 @@ var ResourceDataHandler = {
                 possibleStorage.push(this.storage[i].id);
             }
             if(carry <= 0 ){
-                break;
+                return possibleStorage;
             }
         }
 
