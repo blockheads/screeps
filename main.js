@@ -33,7 +33,7 @@ module.exports.loop = function () {
 
     Manager.printSpawns();
 
-    Manager.printPaths();
+    //Manager.printPaths();
 
     var tower = Game.getObjectById('5eb170065ed8e66cfe840485');
     if(tower) {

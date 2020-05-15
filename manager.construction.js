@@ -6,23 +6,43 @@ const ResourceDataHandler = require("./resourceDataHandler");
 
  class ConstructionManager{
     
-    constructor(room){
+    constructor(room, roomData){
         this._room = room;
+        this._roomData = roomData;
 
         // road map, contains list of paths most comonly used
         this._roadMap = new Map();
+
+        // our construction site data
+        if(Memory.constructionMap)
+            this._constructionMap = Memory.constructionMap;
+
     }
 
     update(resourceData){
+
+        //this._constructionSites = Game.rooms[room].find(FIND_CONSTRUCTION_SITES);
+
         this.getContainerSites(resourceData);
+
+        Memory.constructionMap = this._constructionMap;
     }
 
     
     getContainerSites(resourceData){
-        for(var i in resourceData){
-            console.log("i: ", i );
-            ResourceDataHandler.getContainerLocation(i, this._room);
+        console.log("this._roomData.withdrawPoints.length: ", Object.keys(this._roomData.withdrawPoints).length);
+        console.log("resourceData.length: ", Object.keys(resourceData).length);
+        if(Object.keys(this._roomData.withdrawPoints).length < Object.keys(resourceData).length){
+            for(var i in resourceData){
+                if(Object.keys(resourceData[i].containers).length == 0){
+                    
+                    //if(this._constructionMap[])
+                    
+                }
+                
+            }
         }
+        
     }
 
     pushPath(path){

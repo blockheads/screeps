@@ -11,6 +11,7 @@
 const RoleManager = require('role.manager');
 const SpawnManager = require('./manager.spawner');
 const ConstructionManager = require('./manager.construction');
+const FlagManager = require('./manager.flag');
 const RoomData = require('./roomData');
 const RoomDataHandler = require('RoomDataHandler');
 const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_BUILDER, ROLE_REPAIRER, ROLE_LONG_HARVESTER, ROLE_SCOUT, ROLE_WALL_REPAIRER, 
@@ -51,10 +52,13 @@ class Manager {
  
             if(this._roomData[ROOMS[i]].controlled){
                 this._spawnManagers[ROOMS[i]] = new SpawnManager(this._roomData[ROOMS[i]], ROLES);
-                this._constructionManagers[ROOMS[i]] = new ConstructionManager(ROOMS[i]);
+                this._constructionManagers[ROOMS[i]] = new ConstructionManager(ROOMS[i], this._roomData[ROOMS[i]]);
             }
                 
         }
+
+            // flag manager
+            this._flagManager = new FlagManager();
         
 
         return Manager.instance;
@@ -104,28 +108,18 @@ class Manager {
             this._constructionManagers[i].update(this._roomData[i].resourceData);
         }
 
+        this._flagManager.update();
+
         // update our memory
-        this._roomData = Memory.roomData;
+        Memory.roomData = this._roomData;
     }
 
     respawn(memory,name){
         // we can re-work how this works later...
-        // if(memory.home && memory.source){
-        //       // deleting from other lad too
-        //       for(var j=0; j < this._roomData[memory.home].resourceData[memory.source].creeps.length; j++){
-        //         // iterate over our creep array
-        //         if(this._roomData[memory.home].resourceData[memory.source].creeps[j] == name){
-        //             this._roomData[memory.home].resourceData[memory.source].creeps.splice(j,1);
-        //             memory.source = null; 
-        //             //console.log("deleted ", name, " now ", memory.source, ".");
-        //             return;
-        //         }
-        //     }
-        // }
         
         console.log("memory home: ", memory.home);
         console.log("spawn managers: ", JSON.stringify(this._spawnManagers));
-        this._spawnManagers[memory.home].respawn(memory);
+        this._spawnManagers[memory.home].respawn(memory, name);
     }
 
     // debug method for printing out spawn queues

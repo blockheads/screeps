@@ -149,7 +149,20 @@ class SpawnManager{
     }
 
     // respawns a creep that died
-    respawn(memory){
+    respawn(memory, name){
+        if(memory.home && memory.source){
+            // deleting from other lad too
+            for(var j=0; j < this._roomData.resourceData[memory.source].creeps.length; j++){
+              // iterate over our creep array
+              if(this._roomData.resourceData[memory.source].creeps[j] == name){
+                  this._roomData.resourceData[memory.source].creeps.splice(j,1);
+                  memory.source = null; 
+                  //console.log("deleted ", name, " now ", memory.source, ".");
+                  return;
+              }
+          }
+      }
+
         console.log("creep died should re-add to spawnQueue");
         // re-init.
         memory.state = States.INIT;
@@ -165,9 +178,9 @@ class SpawnManager{
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_HARVESTER);
 
         for(var i in this._roomData.resourceData){
-            if(harvesters.length == 0){
-                ResourceDataHandler.resetHarvesters.call(this._roomData.resourceData[i]);
-            }
+
+            //ResourceDataHandler.resetHarvesters.call(this._roomData.resourceData[i], harvesters);
+            
             var currentHarvesters = ResourceDataHandler.getCurrentHarvesters.call(this._roomData.resourceData[i]);
             var maxHarvesters = ResourceDataHandler.getMaxHarvesters.call(this._roomData.resourceData[i]);
 

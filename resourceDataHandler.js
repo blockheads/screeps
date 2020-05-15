@@ -100,7 +100,7 @@ var ResourceDataHandler = {
      * Updates the Memory.Debug Maps available storage
      */
     updateAvailable: function(){
-        var start = Game.cpu.getUsed();
+
         //console.log("storage: ", this.storage);
         for(var i in this.storage){
             var cstorage = Game.getObjectById(i);
@@ -115,7 +115,7 @@ var ResourceDataHandler = {
             }
                 
         }
-        var end = Game.cpu.getUsed();
+
     },
 
     update: function(room, resource){
