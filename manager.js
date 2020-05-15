@@ -77,7 +77,7 @@ class Manager {
         // get our current energy
         this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
         // caching out current energy as well
-        if(!Memory.currentEnergy || this.currentEnergy != Memory.currentEnergy){
+        //if(!Memory.currentEnergy || this.currentEnergy != Memory.currentEnergy){
          
             console.log("updating available storage.");
 
@@ -86,7 +86,7 @@ class Manager {
             }
             
             Memory.currentEnergy = this.currentEnergy;
-        }
+        //}
 
         // attempt to spawn a creep
         for(var i in this._spawnManagers){
@@ -100,18 +100,18 @@ class Manager {
 
     respawn(memory,name){
         // we can re-work how this works later...
-        if(memory.home && memory.source){
-              // deleting from other lad too
-              for(var j=0; j < this._roomData[memory.home].resourceData[memory.source].creeps.length; j++){
-                // iterate over our creep array
-                if(this._roomData[memory.home].resourceData[memory.source].creeps[j] == name){
-                    this._roomData[memory.home].resourceData[memory.source].creeps.splice(j,1);
-                    memory.source = null; 
-                    //console.log("deleted ", name, " now ", memory.source, ".");
-                    return;
-                }
-            }
-        }
+        // if(memory.home && memory.source){
+        //       // deleting from other lad too
+        //       for(var j=0; j < this._roomData[memory.home].resourceData[memory.source].creeps.length; j++){
+        //         // iterate over our creep array
+        //         if(this._roomData[memory.home].resourceData[memory.source].creeps[j] == name){
+        //             this._roomData[memory.home].resourceData[memory.source].creeps.splice(j,1);
+        //             memory.source = null; 
+        //             //console.log("deleted ", name, " now ", memory.source, ".");
+        //             return;
+        //         }
+        //     }
+        // }
         
         console.log("memory home: ", memory.home);
         console.log("spawn managers: ", JSON.stringify(this._spawnManagers));

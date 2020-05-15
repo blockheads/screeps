@@ -101,6 +101,12 @@ class BaseCreep{
         return Manager.getCreepResourceData(this);
     }
 
+    updateStorage(storage){
+        var value = storage.store.getCapacity(RESOURCE_ENERGY) - storage.store[RESOURCE_ENERGY];
+        console.log("udpating ", storage.id, " to ", value);
+        ResourceDataHandler.updateStorageStruct.call(this.getResourceData(),storage.id, value);
+    }
+
 }
 
 OopUtil.extendClass(Creep, BaseCreep);

@@ -145,6 +145,7 @@ var States = {
             // ensure that our selected storage isn't full
             if(storage.store[RESOURCE_ENERGY] == storage.store.getCapacity(RESOURCE_ENERGY)){
                 // just search for a new storage
+                //creep.updateStorage(storage);
                 creep.memory.selectedStorage = null;
             }
             
@@ -157,7 +158,7 @@ var States = {
             // null out and move to the next available storage element
             if( ret == 0 && creep.memory.selectedStorage){
                 //Memory.DebugMap[creep.memory.source].storage[creep.memory.selectedStorage].available = storage.store[RESOURCE_ENERGY];
-                creep.memory.selectedStorage = null;
+                //creep.updateStorage(storage);
             }
             
         }

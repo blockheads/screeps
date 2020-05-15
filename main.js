@@ -23,7 +23,6 @@ module.exports.loop = function () {
             // update our spawner
             Manager.respawn(Memory.creeps[name],name);
             // we have to get rid of their selected sources too
-            //resource.DeleteCreep(Memory.creeps[name], name);
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
         }

@@ -99,10 +99,11 @@ var ResourceDataHandler = {
     /**
      * Updates the Memory.Debug Maps available storage
      */
-    updateAvailable: function(room, source){
-        //console.log("storage: ", this.storage);
+    updateAvailable: function(){
+        var start = Game.cpu.getUsed();
+        console.log("storage: ", this.storage);
         for(var i in this.storage){
-            var cstorage = Game.getObjectById( this.storage[i].id);
+            var cstorage = Game.getObjectById(i);
             if(!cstorage){
                 console.log("removing storage: ", i);
                 this.removeStorage(i);
@@ -114,7 +115,7 @@ var ResourceDataHandler = {
             }
                 
         }
-        
+        var end = Game.cpu.getUsed();
     },
 
     update: function(room, resource){
@@ -170,16 +171,9 @@ var ResourceDataHandler = {
             if(available != 0){
                 // subtract however much we are removing from available
                 if(carry > available){
-                    console.log("removing everything from this guy.");
-                    this.storage[i].available = 0;
-                }
-                else{
-                    console.log("don't have enough to remove all available");
-                    this.storage[i].available = this.storage[i].available - carry;
                 }
                 carry -= available;
-                console.log("this ", creep.name, "selected storage ", this.storage[i].id, " with ", carry, "left.");
-                possibleStorage.push(this.storage[i].id);
+                possibleStorage.push(i);
             }
             if(carry <= 0 ){
                 return possibleStorage;
@@ -188,6 +182,18 @@ var ResourceDataHandler = {
 
         return possibleStorage;
 
+    },
+
+    /**
+     * updates a particular storage structure with
+     * passed value
+     */
+    updateStorageStruct(id, value){
+        for(var i in this.storage){
+            if(i == id){
+                this.storage[i].available = value;
+            }
+        }
     },
 
     removeStorage(id){

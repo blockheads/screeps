@@ -171,18 +171,7 @@ var Resource = {
         //console.log("called into this function somehow");
         if( memory.source != null && Memory.ResourceMap[memory.source]){
             // delete it from the creep, set it null.
-            
-            //var currentcreeps = Memory.ResourceMap[memory.source].length;
-            //console.log("Deleting one creep from ", memory.source, " new amount is ", currentcreeps - 1)
 
-            for(var j=1; j < Memory.ResourceMap[memory.source].length; j++){
-                if(Memory.ResourceMap[memory.source][j].name == name){
-                    Memory.ResourceMap[memory.source].splice(j,1);
-                    
-                    //console.log("deleted ", name, " now ", memory.source, ".");
-                    break;
-                }
-            }
 
             // deleting from other lad too
             for(var j=0; j < Memory.DebugMap[memory.source]['creeps'].length; j++){

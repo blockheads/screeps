@@ -11,7 +11,8 @@ var RoomDataHandler = {
 
     updateAvailable: function(){
         for(var i in this.resourceData){
-            ResourceDataHandler.updateAvailable.call(this.resourceData[i], Game.spawns['Spawn1'].room ,i);
+            //console.log("updating: ", JSON.stringify(this.resourceData[i]));
+            ResourceDataHandler.updateAvailable.call(this.resourceData[i]);
         }
     },
     
