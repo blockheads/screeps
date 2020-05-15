@@ -56,6 +56,13 @@ module.exports.loop = function () {
                 tower.repair(closestDamagedStructure);
                 //Memory.DebugMap['5bbcaa7e9099fc012e63179d'].storage['5eb170065ed8e66cfe840485'].available = tower.store.getCapacity(RESOURCE_ENERGY) - tower.store[RESOURCE_ENERGY];
             }
+            else{
+                var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                    filter: (structure) => structure.hits < 10000 &&
+                                           structure.structureType == STRUCTURE_RAMPART
+                });
+                tower.repair(closestDamagedStructure);
+            }
         }
         
     }
