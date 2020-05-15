@@ -249,7 +249,7 @@ class SpawnManager{
             return;
 
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_BUILDER);
-        var amount = 2-this._spawnQueue.getRoleAmount(ROLE_BUILDER);
+        var amount = 1- builders - this._spawnQueue.getRoleAmount(ROLE_BUILDER);
 
         if(amount > 0){
             this.push(ROLE_BUILDER, amount);
