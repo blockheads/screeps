@@ -15,7 +15,7 @@ const BASE_CREEP_PRICE = 200;
 class SpawnManager{
 
     constructor(roomData, roles){
-        this._spawnQueue = new PriorityQueue(); 
+        this._spawnQueue = new PriorityQueue();
         this._roomData = roomData;
         // for right now we just reconstruct our queue each time this
         // manager is initialized, later on we can save it in memory
@@ -144,6 +144,7 @@ class SpawnManager{
     // respawns a creep that died
     respawn(memory){
         console.log("creep died should re-add to spawnQueue");
+        //this.push(memory.role, memory.)
         this.update(memory.role);
     }
 
@@ -153,7 +154,12 @@ class SpawnManager{
         if(!this._roomData.controlled)
             return;
 
+        var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_HARVESTER);
+
         for(var i in this._roomData.resourceData){
+            if(harvesters.length == 0){
+                ResourceDataHandler.resetHarvesters.call(this._roomData.resourceData[i]);
+            }
             var currentHarvesters = ResourceDataHandler.getCurrentHarvesters.call(this._roomData.resourceData[i]);
             var maxHarvesters = ResourceDataHandler.getMaxHarvesters.call(this._roomData.resourceData[i]);
 

@@ -99,11 +99,15 @@ var ResourceDataHandler = {
     /**
      * Updates the Memory.Debug Maps available storage
      */
-    updateAvailable: function(source){
+    updateAvailable: function(room, source){
         //console.log("storage: ", this.storage);
         for(var i in this.storage){
             var cstorage = Game.getObjectById( this.storage[i].id);
-            if(cstorage.store[RESOURCE_ENERGY] < cstorage.store.getCapacity(RESOURCE_ENERGY)){
+            if(!cstorage){
+                console.log("removing storage: ", i);
+                this.removeStorage(i);
+            }
+            else if(cstorage.store[RESOURCE_ENERGY] < cstorage.store.getCapacity(RESOURCE_ENERGY)){
                 this.storage[i].available = cstorage.store.getCapacity(RESOURCE_ENERGY) - cstorage.store[RESOURCE_ENERGY];
                 //console.log("storage ", i, " now has ", this.storage[i].available, " available energy.");
                 
@@ -153,6 +157,10 @@ var ResourceDataHandler = {
      
     },
 
+    resetHarvesters: function(){
+        this.creeps = [];
+    },
+
     getPossibleStorage: function(creep){
         var carry = creep.store[RESOURCE_ENERGY];
         var possibleStorage = [];
@@ -180,6 +188,20 @@ var ResourceDataHandler = {
 
         return possibleStorage;
 
+    },
+
+    removeStorage(id){
+        for(var i in this.storage){
+            if(this.storage[i].id == id){
+                this.storage.splice(i,1);
+            }
+        }
+
+        for(var i in this.containers){
+            if(this.containers[i].id == id){
+                this.containers.splice(i,1);
+            }
+        }
     }
 
 }

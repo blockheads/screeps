@@ -8,6 +8,9 @@ var RoleData = {
     ROLE_SCOUT: 'scout',
     ROLE_WALL_REPAIRER:'wallrepairer',
 
+    ROLE_HARVESTER_PRIORITY: 0,
+
+
 }
 
 module.exports = RoleData;
