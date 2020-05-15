@@ -212,6 +212,47 @@ var ResourceDataHandler = {
                 this.containers.splice(i,1);
             }
         }
+    },
+
+    getContainerLocation(source, roomId){
+        // AVAIBLE SLOTS
+        // getting our resource
+
+        var resource = Game.getObjectById(source);
+        var room = Game.rooms[roomId];
+
+        var x = resource.pos.x;
+        var y = resource.pos.y;
+        
+        // calculating avaible slots for a given resource
+        var ret = room.lookAtArea(y-1,x-1,y+1,x+1);
+                
+        var wallTotal = 0;
+        var openLocations = [];
+
+        for(var i=y-1; i <= y+1; i++){
+            for(var j=x-1; j <= x+1; j++){
+                
+                //console.log("current tile: (", j, ',', i, ") ");
+                // a tile can have multiple objects on it
+                for(var k in ret[i][j]){
+                    //console.log("current type: ", ret[i][j][k]["type"]);
+                    if(ret[i][j][k]["type"] == LOOK_TERRAIN){
+                        // then we check if it is a wall
+                        if(ret[i][j][k][LOOK_TERRAIN] == 'wall'){
+                            wallTotal++;
+                        }
+                        else{
+                            openLocations.push({x:x,y:y});
+                        }
+                    }
+                }
+                
+            }
+        }
+    
+        console.log("open locations: ", JSON.stringify(openLocations));
+    
     }
 
 }

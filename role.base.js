@@ -111,8 +111,8 @@ class BaseCreep{
         console.log("overridden!");
         
         this.moveTo(target,visualizePathStyle);
-        var path = this.pos.findPathTo(target);
-        Manager.pushPath(path, this);
+        //var path = this.pos.findPathTo(target);
+        //Manager.pushPath(path, this);
         
        
     }

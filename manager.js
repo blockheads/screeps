@@ -69,16 +69,15 @@ class Manager {
         // get our max energy
         this.maxEnergy = Game.spawns['Spawn1'].room.energyCapacityAvailable;
         // caching our max energy, it also determines if we should check for updates
-        if(!Memory.maxEnergy ||  this.maxEnergy != Memory.maxEnergy){
+        //if(!Memory.maxEnergy ||  this.maxEnergy != Memory.maxEnergy){
 
-            console.log("Max Energy updated... updating");
-            for(var i in this._roomData){
-                RoomDataHandler.update.call(this._roomData[i]);    
-            }
-
-            Memory.maxEnergy =  this.maxEnergy;
-            
+        for(var i in this._roomData){
+            RoomDataHandler.update.call(this._roomData[i]);    
         }
+
+        Memory.maxEnergy =  this.maxEnergy;
+        
+        //}
 
         // get our current energy
         //this.currentEnergy = Game.spawns['Spawn1'].room.energyAvailable;
@@ -87,9 +86,9 @@ class Manager {
          
             //console.log("updating available storage.");
 
-        for(var i in this._roomData){
-            RoomDataHandler.updateAvailable.call(this._roomData[i]);
-        }
+        //for(var i in this._roomData){
+            //RoomDataHandler.updateAvailable.call(this._roomData[i]);
+        //}
         
         //Memory.currentEnergy = this.currentEnergy;
         //}
@@ -98,6 +97,11 @@ class Manager {
         for(var i in this._spawnManagers){
             // right now since i'm lazy
             this._spawnManagers[i].spawn(this);
+            
+        }
+
+        for(var i in this._constructionManagers){
+            this._constructionManagers[i].update(this._roomData[i].resourceData);
         }
 
         // update our memory

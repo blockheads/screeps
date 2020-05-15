@@ -2,6 +2,8 @@
  * This is the manager for automated construction
  */
 
+const ResourceDataHandler = require("./resourceDataHandler");
+
  class ConstructionManager{
     
     constructor(room){
@@ -11,7 +13,18 @@
         this._roadMap = new Map();
     }
 
+    update(resourceData){
+        this.getContainerSites(resourceData);
+    }
+
     
+    getContainerSites(resourceData){
+        for(var i in resourceData){
+            console.log("i: ", i );
+            ResourceDataHandler.getContainerLocation(i, this._room);
+        }
+    }
+
     pushPath(path){
        
         for(var i in path){
