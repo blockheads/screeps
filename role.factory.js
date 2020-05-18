@@ -1,3 +1,5 @@
+const FactoryNode = require("./role.factoryNode");
+
 var RoleFactory = {
 
     // generates a base creep
@@ -19,13 +21,14 @@ var RoleFactory = {
         while(true){
            
             for(var i in node.pattern){
+
                 total += BODYPART_COST[node.pattern[i]];
                 //console.log("total: ", total);
                 if(total >= maxPrice){
                     return parts;
                 }
 
-                parts.push(node.base[i]);
+                parts.push(node.pattern[i]);
             }
             
         }

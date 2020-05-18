@@ -26,7 +26,7 @@ var TransportCreep = {
                 States.runInit(creep, init, States.WITHDRAW);
                 break;
             case States.WITHDRAW:
-                States.runWithdraw(creep, States.WORK, States.WITHDRAW);
+                States.runWithdraw(creep, States.STORE, States.WITHDRAW);
                 break;
             case States.STORE:
                 States.runStore(creep, States.WITHDRAW, STORAGE_PRIMARY);
