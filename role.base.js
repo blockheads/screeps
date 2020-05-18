@@ -2,6 +2,8 @@ const OopUtil = require('util.oop');
 var resource = require('resource');
 const Manager = require('manager');
 const ResourceDataHandler = require('./resourceDataHandler');
+const { STORAGE_PRIMARY, STORAGE_SECONDARY, STORAGE_WITHDRAW } = require('./util.room');
+const RoomDataHandler = require('./RoomDataHandler');
 
 class BaseCreep{
 
@@ -70,6 +72,7 @@ class BaseCreep{
     }
 
     getContainerWithdraw(){
+        
         const containersWithEnergy = this.room.find(FIND_STRUCTURES, {
             filter: (i) => i.structureType == STRUCTURE_CONTAINER &&
                            i.store[RESOURCE_ENERGY] > 0
@@ -83,17 +86,16 @@ class BaseCreep{
         return resource.findOptimalSource(this);
     }
 
-    getPriorityStorage(){
+    getRoomData(){
+        return Manager.getCreepRoomData(this);
+    }
+
+    getPrimaryStorage(){
 
         this.memory.storage = [];
         //console.log("name: ", this.name, " home: ", this.memory.home);
-        try{
-            var resourceData = Manager.getCreepResourceData(this);
-            this.memory.storage = ResourceDataHandler.getPossibleStorage.call(resourceData, this);
-        }
-        catch(err){
-            //console.log("threw ", err);
-        }
+        var resourceData = this.getResourceData();
+        this.memory.storage = ResourceDataHandler.getPossibleStorage.call(resourceData, this);
             
     }
 

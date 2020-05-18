@@ -16,7 +16,7 @@ const RoomData = require('./roomData');
 const RoomDataHandler = require('RoomDataHandler');
 const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_BUILDER, ROLE_REPAIRER, ROLE_LONG_HARVESTER, ROLE_SCOUT, ROLE_WALL_REPAIRER, 
     ROLE_HARVESTER_PRIORITY, ROLE_UPGRADER_PRIORITY, ROLE_BUILDER_PRIORITY, ROLE_REPIARER_PRIORITY, ROLE_LONG_HARVESTER_PRIORITY, 
-    ROLE_SCOUT_PRIORITY, ROLE_WALL_REPAIRER_PRIORITY } = require('./util.role');
+    ROLE_SCOUT_PRIORITY, ROLE_WALL_REPAIRER_PRIORITY, ROLE_TRANSPORTER, ROLE_TRANSPORTER_PRIORITY } = require('./util.role');
 
 // ROLES name -> file name mapping , priority
 const ROLES = {};
@@ -27,6 +27,7 @@ ROLES[ROLE_REPAIRER] = ['worker.repairer', ROLE_REPIARER_PRIORITY];
 ROLES[ROLE_LONG_HARVESTER] = ['longHarvester', ROLE_LONG_HARVESTER_PRIORITY];
 ROLES[ROLE_SCOUT] = ['scout', ROLE_SCOUT_PRIORITY];
 ROLES[ROLE_WALL_REPAIRER] = ['worker.repairer.wall', ROLE_WALL_REPAIRER_PRIORITY];
+ROLES[ROLE_TRANSPORTER] = ['transporter', ROLE_TRANSPORTER_PRIORITY];
 
 // room data
 const ROOMS = ['W47S15', 'W47S14'];
@@ -134,13 +135,17 @@ class Manager {
      * Get's resourceData corresponding to a particular creep
      */
     getCreepResourceData(creep){
-        // error handling
-        if(!creep.memory.home)
-            throw "Error. invalid creep, requires home in memory.";
         if(!creep.memory.source)
             throw "Error. Creep need's a source specified in order to get resourceData.";
 
-        return this._roomData[creep.memory.home].resourceData[creep.memory.source];
+        return this.getCreepRoomData(creep).resourceData[creep.memory.source];
+    }
+
+    getCreepRoomData(creep){
+        if(!creep.memory.home)
+            throw "Error. invalid creep, requires home in memory.";
+
+        return this._roomData[creep.memory.home];
     }
 
     _loadRoomMemory(){

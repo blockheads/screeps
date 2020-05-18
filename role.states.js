@@ -1,3 +1,6 @@
+const { STORAGE_WITHDRAW, STORAGE_PRIMARY } = require('./util.room');
+const ResourceDataHandler = require('./resourceDataHandler');
+
 var States = {
     
     INIT: 0,
@@ -5,6 +8,8 @@ var States = {
     WITHDRAW: 2,
     HARVEST:  3,
     STORE: 4,
+    // this is for constant storing, on a pre-set container
+    CONSTANT_STORE: 5,
 
     /**
      * Runs stateful logic for a creep on initilization
@@ -73,6 +78,13 @@ var States = {
             return;
         }
 
+        // if we have a pre-set withdraw point use it
+        if(creep.memory.withdrawPoint){
+            creep.memory.withdrawing = true;
+            creep.memory.withdraw = creep.memory.withdrawPoint.id;
+            return;
+        }
+
         // otherwise get withdraw options
         withdrawContainers = creep.getContainerWithdraw();
 
@@ -120,8 +132,8 @@ var States = {
     },
 
     // this function NEEDS to be optimized
-    runStore: function(creep, transitionState){
-
+    runStore: function(creep, transitionState, type){
+        
         if(creep.store[RESOURCE_ENERGY] == 0){
             creep.memory.state = transitionState;
             creep.memory.selectedStorage = null;
@@ -129,14 +141,25 @@ var States = {
             return;
         }
 
-        //hauling
+
+
+       
         if(!creep.memory.storage){
             // assigning this creep storage
-            creep.getPriorityStorage();
+            
             //console.log("creep: ", creep.name, " selected: ", JSON.stringify(creep.memory.storage));
+            switch(type){
+                case STORAGE_WITHDRAW:
+                    creep.memory.storage = [ResourceDataHandler.getWithdrawPoint.call(creep.getResourceData()).id];
+                    break;
+                case STORAGE_PRIMARY:
+                    creep.getPrimaryStorage();
+                    break;
+            }
             
         }
         else if(creep.memory.selectedStorage || creep.memory.storage.length > 0){
+            
             
             if(!creep.memory.selectedStorage){
                 creep.memory.selectedStorage = creep.memory.storage.shift();

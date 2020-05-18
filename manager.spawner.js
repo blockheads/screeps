@@ -5,11 +5,12 @@
  */
 
 const PriorityQueue = require("./util.priorityQueue");
-const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_WALL_REPAIRER, ROLE_BUILDER } = require("./util.role");
+const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_WALL_REPAIRER, ROLE_BUILDER, ROLE_TRANSPORTER } = require("./util.role");
 const ResourceDataHandler = require("./resourceDataHandler");
 const Node = require("./util.node");
 const RoleFactory = require("./role.factory");
 const States = require("./role.states");
+const RoomDataHandler = require("./RoomDataHandler");
 
 const BASE_CREEP_PRICE = 200;
 
@@ -158,20 +159,36 @@ class SpawnManager{
        if(constructionSites.length > 0)
            this.updateBuilders();
 
+        // need a withdraw point to update this.
+        if(RoomDataHandler.hasWithdrawPoint.call(this._roomData))
+            this.updateTransporters();
+
     }
 
     // respawns a creep that died 
     respawn(memory, name){
         if(memory.home && memory.source){
             // deleting from other lad too
-            for(var j=0; j < this._roomData.resourceData[memory.source].creeps.length; j++){
+            for(var j=0; j < this._roomData.resourceData[memory.source].harvesters.length; j++){
               // iterate over our creep array
-              if(this._roomData.resourceData[memory.source].creeps[j] == name){
-                  this._roomData.resourceData[memory.source].creeps.splice(j,1);
+              if(this._roomData.resourceData[memory.source].harvesters[j] == name){
+                  this._roomData.resourceData[memory.source].harvesters.splice(j,1);
                   //console.log("deleted ", name, " now ", memory.source, ".");
               }
-          }
-      }
+
+              
+            }
+
+            for(var j=0; j < this._roomData.resourceData[memory.source].transporters.length; j++){
+                // iterate over our creep array
+                if(this._roomData.resourceData[memory.source].transporters[j] == name){
+                    this._roomData.resourceData[memory.source].transporters.splice(j,1);
+                    //console.log("deleted ", name, " now ", memory.source, ".");
+                }
+  
+            }
+
+        }
 
         console.log("creep died should re-add to spawnQueue");
         // re-init.
@@ -255,6 +272,32 @@ class SpawnManager{
             this.push(ROLE_BUILDER, amount);
         }
         
+
+    }
+
+    updateTransporters(){
+
+        if(!this._roomData.controlled)
+            return;
+
+        var resourceAmount = Object.keys(this._roomData.resourceData).length;
+
+        for(var i in this._roomData.resourceData){
+
+            // we need a withdraw point for our transporters to work...
+            if(ResourceDataHandler.hasWithdrawPoint.call(this._roomData.resourceData[i])){
+                var currentTransporters = ResourceDataHandler.getCurrentTransporters.call(this._roomData.resourceData[i]);
+                var maxTransporters = ResourceDataHandler.getMaxTransporters.call(this._roomData.resourceData[i]);
+    
+                var amount = maxTransporters - currentTransporters - this._spawnQueue.getRoleAmount(ROLE_TRANSPORTER); 
+    
+                if(amount > 0){
+                    this.push(ROLE_TRANSPORTER, amount, {withdrawPoint: ResourceDataHandler.getWithdrawPoint.call(this._roomData.resourceData[i]), source: i});
+                }
+            }
+            
+        }
+
 
     }
 

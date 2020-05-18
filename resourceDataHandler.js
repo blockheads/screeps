@@ -84,7 +84,7 @@ var ResourceDataHandler = {
 
         this.containers = containers;
 
-        var storageList = mainStorage.concat(towers,containers);
+        var storageList = mainStorage.concat(towers);
 
         // store in our map
         for(var i in storageList){
@@ -129,7 +129,7 @@ var ResourceDataHandler = {
         // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
         var maxCreeps = 5 - floor((Memory.maxEnergy-400)/300);
         //onsole.log("max creeps: ", maxCreeps);
-        if(this.creeps.length < maxCreeps){
+        if(this.harvesters.length < maxCreeps){
             return true;
         }
         return false;
@@ -141,13 +141,13 @@ var ResourceDataHandler = {
      * and active creeps
      */
     addCreep: function(creepName){   
-        this.creeps.push(creepName);
+        this.harvesters.push(creepName);
     },
 
     getCurrentHarvesters: function(){
         // this is the forumla I calculated. Initialyl have 6 creeps?
         // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
-        return this.creeps.length;
+        return this.harvesters.length;
      
     },
 
@@ -158,8 +158,25 @@ var ResourceDataHandler = {
      
     },
 
+    getCurrentTransporters: function(){
+        // this is the forumla I calculated. Initialyl have 6 creeps?
+        // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
+        return this.transporters.length;
+    },
+
+    getMaxTransporters: function(){
+        // this is the forumla I calculated. Initialyl have 6 creeps?
+        // so it goes like 400 | 5, 700 | 4, 1000 | 3, 1300 |2, ...
+        return 1;
+     
+    },
+
     resetHarvesters: function(){
-        this.creeps = [];
+        this.harvesters = [];
+    },
+
+    resetTransporters: function(){
+        this.transporters = [];
     },
 
     getPossibleStorage: function(creep){
@@ -253,8 +270,15 @@ var ResourceDataHandler = {
     
         console.log("open locations: ", JSON.stringify(openLocations));
     
-    }
+    },
 
+    hasWithdrawPoint(){
+        return Object.keys(this.containers).length > 0;
+    },
+
+    getWithdrawPoint(){
+        return this.containers[0];
+    }
 }
 
 module.exports = ResourceDataHandler;

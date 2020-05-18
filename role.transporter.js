@@ -2,13 +2,16 @@
  * Transport creep moves resources around
  */
 
-const WorkerCreep = require("./role.base");
+const { STORAGE_PRIMARY } = require("./util.room");
+const FactoryNode = require('./role.factoryNode');
+var gen = require('util.gen');
+const States = require('role.states');
 
 // our protype class which uses methods from 
 // role.worker
 var TransportCreep = {
 
-    run(creep, init, performLogic){
+    run(creep, init){
         // WORKER CREEP STATES
         // =-----------------=
         // INIT -> WITHDRAW
@@ -25,8 +28,8 @@ var TransportCreep = {
             case States.WITHDRAW:
                 States.runWithdraw(creep, States.WORK, States.WITHDRAW);
                 break;
-            case States.WORK:
-                States.runWork(creep, performLogic, States.WITHDRAW);
+            case States.STORE:
+                States.runStore(creep, States.WITHDRAW, STORAGE_PRIMARY);
                 break;
         }
         
@@ -34,16 +37,23 @@ var TransportCreep = {
 }
 
  var roleTransport = {
-    performLogic: function(){
-        // grab nearest storage
+    
+    build: function(creep){
+        return new FactoryNode([WORK,CARRY,MOVE],[CARRY,CARRY,MOVE]);
     },
 
-    init: function(){
+    init: function(creep){
         // grab nearest storage
+        creep.getResourceData().transporters.push(creep.name);
     },
 
     run: function(creep){
-        Creep.run(this.performLogic);
+        TransportCreep.run(creep, this.init);
+    },
+
+    gen: function(){
+        name = "🚆Transporter🚆" + gen.get();
+        return name;
     }
  }
 

@@ -20,7 +20,9 @@ class ResourceData {
       // leave this in, but with automated registry, they
       // will get registered as built
       // initialize this dope shit
-      this.creeps = [];
+      this.harvesters = [];
+
+      this.transporters = [];
 
       this.setAvailableSlots(room, source);
       ResourceDataHandler.update.call(this, room, source);

@@ -20,6 +20,13 @@ var RoomDataHandler = {
         }
     },
     
+    hasWithdrawPoint: function(){
+        return Object.keys(this.withdrawPoints).length > 0;
+    },
+
+    getWithdrawPoints: function(){
+        return this.withdrawPoints;
+    }
 }
 
 module.exports = RoomDataHandler;
