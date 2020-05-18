@@ -1,7 +1,6 @@
 // our protype class which uses methods from 
 // role.worker
 const States = require('role.states');
-const { STORAGE_PRIMARY } = require('./util.room');
 
 var TransportCreep = {
 
@@ -23,7 +22,7 @@ var TransportCreep = {
                 States.runWithdraw(creep, States.STORE, States.WITHDRAW);
                 break;
             case States.STORE:
-                States.runStore(creep, States.WITHDRAW, STORAGE_PRIMARY);
+                States.runStore(creep, States.WITHDRAW,storageType);
                 break;
         }
         

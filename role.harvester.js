@@ -13,7 +13,7 @@ var roleHarvester = {
     },
 
     build: function(creep){
-        return new FactoryNode([WORK,CARRY,MOVE],[WORK,WORK,CARRY]);
+        return new FactoryNode([WORK,CARRY,MOVE],[WORK]);
     },
 
     /** @param {Creep} creep **/

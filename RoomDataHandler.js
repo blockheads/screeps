@@ -10,7 +10,6 @@ var RoomDataHandler = {
                 this.withdrawPoints[containers[i].id] = containers[i];
             }
         }
-
     },
 
     updateAvailable: function(){
