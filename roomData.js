@@ -26,6 +26,11 @@ class RoomData{
                 }
             }
         }
+
+        // hard coded data for now, once automated construction is finished this will be modifed.
+        if(this.id == 'W47S15'){
+            this.controllerStorage = '5bbcaa7e9099fc012e63179f';
+        }
         
     }
 

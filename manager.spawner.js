@@ -5,7 +5,7 @@
  */
 
 const PriorityQueue = require("./util.priorityQueue");
-const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_WALL_REPAIRER, ROLE_BUILDER, ROLE_TRANSPORTER } = require("./util.role");
+const { ROLE_HARVESTER, ROLE_UPGRADER, ROLE_REPAIRER, ROLE_WALL_REPAIRER, ROLE_BUILDER, ROLE_TRANSPORTER, ROLE_CONTROLLER_TRANSPORTER } = require("./util.role");
 const ResourceDataHandler = require("./resourceDataHandler");
 const Node = require("./util.node");
 const RoleFactory = require("./role.factory");
@@ -298,6 +298,15 @@ class SpawnManager{
             
         }
 
+        // controller storage transport spawns
+        if(this._roomData.controllerStorage){
+            var controllerTransporters = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_CONTROLLER_TRANSPORTER);
+            var amount = 1 - controllerTransporters - this._spawnQueue.getRoleAmount(ROLE_CONTROLLER_TRANSPORTER);
+
+            if(amount > 0){
+                this.push(ROLE_CONTROLLER_TRANSPORTER, amount, { source: i});
+            }
+        }
 
     }
 

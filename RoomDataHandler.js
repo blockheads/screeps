@@ -26,6 +26,10 @@ var RoomDataHandler = {
 
     getWithdrawPoints: function(){
         return this.withdrawPoints;
+    },
+
+    getControllerStorage: function(){
+        return this.controllerStorage;
     }
 }
 

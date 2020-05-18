@@ -1,4 +1,4 @@
-const { STORAGE_WITHDRAW, STORAGE_PRIMARY } = require('./util.room');
+const { STORAGE_WITHDRAW, STORAGE_PRIMARY, STORAGE_CONTROLLER } = require('./util.room');
 const ResourceDataHandler = require('./resourceDataHandler');
 
 var States = {
@@ -142,8 +142,6 @@ var States = {
         }
 
 
-
-       
         if(!creep.memory.storage){
             // assigning this creep storage
             
@@ -154,6 +152,9 @@ var States = {
                     break;
                 case STORAGE_PRIMARY:
                     creep.getPrimaryStorage();
+                    break;
+                case STORAGE_CONTROLLER:
+                    creep.memory.storage = [RoomDataHandler.getControllerStorage.call(this.getRoomData())];
                     break;
             }
             

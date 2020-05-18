@@ -13,8 +13,6 @@ just do a update for that room.
 so, big issue is we need to make it so when you build like a container or something it gets put into the list automatically, i'm thinking though this can be automated
 with automated construction stuff.
 
-Issue is small harvesters get built early, than bigger boys, than we just have small harvesters. Need to scale amount w/ their price.
-
 FIX ALL THIS LAGGY CODE YOU JUST ADDED >:(
 
 For repairers:
@@ -26,3 +24,4 @@ Fix storage, maybe split up into stuff idk...
 fix withdrawContainer...
 
 destryoed structures need to be deleted from memory. Better way to organize storage elements..
+

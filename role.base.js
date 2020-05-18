@@ -114,9 +114,7 @@ class BaseCreep{
         
         this.moveTo(target,visualizePathStyle);
         //var path = this.pos.findPathTo(target);
-        //Manager.pushPath(path, this);
-        
-       
+        //Manager.pushPath(path, this);  
     }
 
 }
