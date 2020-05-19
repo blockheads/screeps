@@ -226,7 +226,7 @@ class SpawnManager{
             return;
 
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_UPGRADER);
-        var amount = 4-upgraders.length-this._spawnQueue.getRoleAmount(ROLE_UPGRADER);
+        var amount = 2-upgraders.length-this._spawnQueue.getRoleAmount(ROLE_UPGRADER);
 
         if(amount > 0){
             this.push(ROLE_UPGRADER, amount);
@@ -252,8 +252,8 @@ class SpawnManager{
         if(!this._roomData.controlled)
             return;
 
-        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_WALL_REPAIRER);
-        var amount = 1-upgraders.length-this._spawnQueue.getRoleAmount(ROLE_WALL_REPAIRER);
+        var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == ROLE_WALL_REPAIRER);
+        var amount = 1-repairers.length-this._spawnQueue.getRoleAmount(ROLE_WALL_REPAIRER);
 
         if(amount > 0){
             this.push(ROLE_WALL_REPAIRER, amount);
@@ -286,10 +286,11 @@ class SpawnManager{
 
             // we need a withdraw point for our transporters to work...
             if(ResourceDataHandler.hasWithdrawPoint.call(this._roomData.resourceData[i])){
-                var currentTransporters = ResourceDataHandler.getCurrentTransporters.call(this._roomData.resourceData[i]);
+                var currentTransporters = ResourceDataHandler.getCurrentTransporters.call(this._roomData.resourceData[i]); 
                 var maxTransporters = ResourceDataHandler.getMaxTransporters.call(this._roomData.resourceData[i]);
     
                 var amount = maxTransporters - currentTransporters - this._spawnQueue.getRoleAmount(ROLE_TRANSPORTER); 
+                console.log("for: ", i, " maxTransporters:", maxTransporters, " - currentTransporters:", currentTransporters, " this._spawnQueue.getRoleAmount(ROLE_TRANSPORTER): ",  this._spawnQueue.getRoleAmount(ROLE_TRANSPORTER));
     
                 if(amount > 0){
                     this.push(ROLE_TRANSPORTER, amount, {withdrawPoint: ResourceDataHandler.getWithdrawPoint.call(this._roomData.resourceData[i]), source: i});

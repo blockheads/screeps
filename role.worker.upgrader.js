@@ -3,10 +3,12 @@ var resource = require('resource');
 require('prototype.room')();
 const WorkerCreep = require('role.worker');
 const FactoryNode = require('./role.factoryNode');
+const RoomDataHandler = require('./RoomDataHandler');
+const { ROLE_CONTROLLER_TRANSPORTER } = require('./util.role');
 
 var roleUpgrader = {
     build: function(creep){
-        return new FactoryNode([WORK,CARRY,MOVE],[WORK,CARRY,MOVE]);
+        return new FactoryNode([WORK,CARRY,MOVE,MOVE],[WORK,WORK,WORK,CARRY]);
     },
 
     performLogic: function(){
@@ -26,7 +28,19 @@ var roleUpgrader = {
     run: function(creep) {
         // WorkerCreep run method
         //WorkerCreep.run(creep, this.performLogic);
-        WorkerCreep.run(creep, this.init, this.performLogic);
+        
+        // if we have a controller storage, and a transporter
+        if(RoomDataHandler.getControllerStorage.call(creep.getRoomData())){
+
+            creep.memory.withdrawPoint = RoomDataHandler.getControllerStorage.call(creep.getRoomData());
+            WorkerCreep.runWithTransport(creep, this.init, this.performLogic);
+        }
+        else{
+
+            creep.memory.withdrawPoint = null;
+            WorkerCreep.run(creep, this.init, this.performLogic);
+        }
+        
     },
     
     /**

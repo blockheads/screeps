@@ -28,7 +28,8 @@ var RoomDataHandler = {
     },
 
     getControllerStorage: function(){
-        return this.controllerStorage;
+        // yeah... this isn't great I know.
+        return {'id': this.controllerStorage};
     }
 }
 

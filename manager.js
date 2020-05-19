@@ -102,8 +102,8 @@ class Manager {
         // attempt to spawn a creep
         for(var i in this._spawnManagers){
             // right now since i'm lazy
-            this._spawnManagers[i].spawn(this);
             this._spawnManagers[i].update();
+            this._spawnManagers[i].spawn(this);
             
         }
 
